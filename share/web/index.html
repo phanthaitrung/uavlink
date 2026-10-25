@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>uavlink setup page</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <script src="vendor/qrcodegen.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1>uavlink</h1>
+      <span class="sub" id="host-line"></span>
+    </div>
+    <nav class="top-actions" aria-label="uavlink">
+      <button type="button" class="btn ghost" id="nav-page"></button>
+      <div class="lang" role="group" id="lang-toggle">
+        <button type="button" data-lang="vi" aria-pressed="false">VI</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </nav>
+  </header>
+
+  <ol class="stepper" id="stepper"></ol>
+  <div id="alert" class="alert hidden" role="alert"></div>
+
+  <main id="main" tabindex="-1">
+    <p class="loading">…</p>
+  </main>
+
+  <noscript><p class="alert">JavaScript is required / Cần bật JavaScript.</p></noscript>
+</body>
+</html>

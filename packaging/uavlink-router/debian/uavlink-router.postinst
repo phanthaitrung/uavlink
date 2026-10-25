@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+#DEBHELPER#
+
+# Installing never enables or starts the unit. An upgrade restarts it only if it is active.
+if [ "$1" = configure ] && [ -d /run/systemd/system ]; then
+	systemctl daemon-reload || true
+	if [ -n "$2" ]; then
+		deb-systemd-invoke try-restart uavlink-router.service || true
+	fi
+fi
+
+exit 0

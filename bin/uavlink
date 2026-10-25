@@ -1,0 +1,17 @@
+#!/usr/bin/python3
+"""uavlink launcher: puts the Python package on sys.path and runs the CLI."""
+import os
+import sys
+
+sys.dont_write_bytecode = True
+
+_here = os.path.dirname(os.path.realpath(__file__))
+_src = os.path.join(_here, "..", "py")
+if os.path.isdir(os.path.join(_src, "uavlink")):
+    sys.path.insert(0, os.path.normpath(_src))
+else:
+    sys.path.insert(0, "/usr/lib/uavlink/py")
+
+from uavlink.cli import main  # noqa: E402
+
+sys.exit(main())

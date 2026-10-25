@@ -1,0 +1,30 @@
+{
+  "id": "bench-lan",
+  "role": "cm5",
+  "order": 40,
+  "star": false,
+  "name": {"vi": "Thử nghiệm trên bàn (LAN)", "en": "Bench test (LAN)"},
+  "desc": {
+    "vi": "Thử nghiệm trong phòng: GCS cùng mạng Wi-Fi/LAN kết nối trực tiếp vào CM5 (TCP 5760, UDP 14550). Không gửi MAVLink lên VPS. Tường lửa mở MAVLink cho mạng nội bộ, ký MAVLink2 tắt.",
+    "en": "Indoor testing: a GCS on the same Wi-Fi/LAN connects directly to the CM5 (TCP 5760, UDP 14550). No MAVLink is sent to a VPS. The firewall opens MAVLink to the local network, MAVLink2 signing is off."
+  },
+  "warning": {
+    "vi": "KHÔNG DÙNG ĐỂ BAY: MAVLink không ký và mở cho toàn bộ mạng nội bộ; mọi thiết bị trong mạng đều gửi được lệnh tới mạch bay X25.",
+    "en": "NOT FOR FLIGHT: MAVLink is unsigned and open to the whole local network; any device on the network can send commands to the X25 flight controller."
+  },
+  "values": {
+    "CM5_LAN_IP": "192.168.50.2",
+    "CM5_ETH_EXTRA_ADDRS": "192.168.144.2/24",
+    "X25_IP": "192.168.50.1",
+    "X25_NETMASK": "24",
+    "VPS_PUBLIC_IP": "",
+    "CM5_EXTRA_UDP_TARGETS": "",
+    "MAVLINK_SIGNING": "0",
+    "SSH_HARDEN": "1",
+    "CM5_ENABLE_UFW": "1",
+    "CM5_SSH_ALLOW_LAN": "1",
+    "CM5_MAVLINK_ALLOW_LAN": "1",
+    "SERVICE_SANDBOX": "1"
+  },
+  "ask": []
+}

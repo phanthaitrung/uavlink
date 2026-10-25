@@ -1,0 +1,26 @@
+Source: uavlink-router
+Section: net
+Priority: optional
+Maintainer: tomphan <phanthaitrung@gmail.com>
+# A cross build (-Pcross) takes the compiler from crossbuild-essential-<arch>; pkg-config only looks for the
+# optional gtest, which nocheck does not need. Unmarked, both would have to be packages of the target arch.
+Build-Depends: debhelper-compat (= 13),
+               g++ (>= 4:9) <!cross>,
+               meson (>= 0.55),
+               ninja-build,
+               pkgconf <!cross>,
+Standards-Version: 4.6.2
+Homepage: https://github.com/mavlink-router/mavlink-router
+Rules-Requires-Root: no
+
+Package: uavlink-router
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: MAVLink router for the uavlink companion computer
+ mavlink-router (commit 2362c62) routes MAVLink messages between a flight
+ controller on a serial port and any number of UDP, TCP and log endpoints.
+ .
+ This package installs the router as /usr/lib/uavlink-router/mavlink-routerd
+ and the unit uavlink-router.service. Nothing is placed in /usr/bin, and the
+ unit is neither enabled nor started by the package; the uavlink engine
+ configures it (/etc/mavlink-router/main.conf) and enables it.

@@ -1,0 +1,6 @@
+# Packaged from a pinned upstream commit (2362c62, after tag v4) by fetch-orig.sh, which also adds the
+# mavlink_c_library_v2 submodule: uscan only reports new upstream tags, the tarball is never made by uscan.
+version=4
+opts="mode=git, pgpmode=none" \
+  https://github.com/mavlink-router/mavlink-router.git \
+  refs/tags/v(\d[\d.]*)

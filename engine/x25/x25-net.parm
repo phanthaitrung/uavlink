@@ -1,0 +1,26 @@
+# Tham số mạng cho CUAV X25 EVO (ArduCopter 4.7.x), giá trị theo config.env mặc định.
+# Chỉ dùng khi nạp tay bằng Mission Planner; cách tự động là `bash deploy.sh x25`.
+#
+# Mission Planner > CONFIG > Full Parameter List > Load from file > Write Params, nạp 2 lần:
+#   Lần 1: chỉ NET_ENABLE, NET_P1_TYPE được nhận (các dòng khác báo không tìm thấy, bỏ qua)
+#          -> Write Params -> khởi động lại mạch bay (Ctrl+F > Reboot hoặc rút nguồn).
+#   Lần 2: nạp lại tệp này -> Write Params -> khởi động lại mạch bay.
+# Trước đó: Save to file để sao lưu toàn bộ tham số.
+NET_ENABLE,1
+NET_P1_TYPE,1
+NET_DHCP,0
+NET_IPADDR0,192
+NET_IPADDR1,168
+NET_IPADDR2,50
+NET_IPADDR3,1
+NET_NETMASK,24
+NET_GWADDR0,0
+NET_GWADDR1,0
+NET_GWADDR2,0
+NET_GWADDR3,0
+NET_P1_IP0,192
+NET_P1_IP1,168
+NET_P1_IP2,50
+NET_P1_IP3,2
+NET_P1_PORT,14550
+NET_P1_PROTOCOL,2

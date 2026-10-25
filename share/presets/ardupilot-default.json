@@ -1,0 +1,26 @@
+{
+  "id": "ardupilot-default",
+  "role": "cm5",
+  "order": 50,
+  "star": false,
+  "name": {"vi": "Dải mặc định ArduPilot", "en": "ArduPilot default subnet"},
+  "desc": {
+    "vi": "Ít thay đổi tham số X25 nhất: X25 192.168.144.14 ↔ CM5 192.168.144.2. Nhập đích nhận MAVLink (VPS và/hoặc các máy trong Tailscale). Ký MAVLink2 bật, tường lửa bật, SSH chỉ dùng khóa.",
+    "en": "Fewest X25 parameter changes: X25 192.168.144.14 ↔ CM5 192.168.144.2. Enter the MAVLink destinations (a VPS and/or machines in Tailscale). MAVLink2 signing on, firewall on, SSH key-only."
+  },
+  "values": {
+    "CM5_LAN_IP": "192.168.144.2",
+    "CM5_ETH_EXTRA_ADDRS": "",
+    "X25_IP": "192.168.144.14",
+    "X25_NETMASK": "24",
+    "VPS_PUBLIC_IP": "",
+    "CM5_EXTRA_UDP_TARGETS": "",
+    "MAVLINK_SIGNING": "1",
+    "SSH_HARDEN": "1",
+    "CM5_ENABLE_UFW": "1",
+    "CM5_SSH_ALLOW_LAN": "1",
+    "CM5_MAVLINK_ALLOW_LAN": "0",
+    "SERVICE_SANDBOX": "1"
+  },
+  "ask": ["VPS_PUBLIC_IP", "CM5_EXTRA_UDP_TARGETS"]
+}

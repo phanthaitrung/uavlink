@@ -1,0 +1,4 @@
+Name=pi
+Type=wayland
+Active=yes
+Remote=no

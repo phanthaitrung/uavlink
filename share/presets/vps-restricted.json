@@ -1,0 +1,28 @@
+{
+  "id": "vps-restricted",
+  "role": "vps",
+  "order": 30,
+  "star": false,
+  "name": {"vi": "Relay giới hạn IP", "en": "IP-restricted relay"},
+  "desc": {
+    "vi": "Như mẫu Relay + Web Admin (mặc định), nhưng cổng GCS (TCP/UDP) chỉ mở cho danh sách IP/CIDR. Giá trị mặc định là dải Tailscale 100.64.0.0/10; cần sửa thành địa chỉ IP của các GCS.",
+    "en": "As the Relay + Web Admin (default) preset, but the GCS ports (TCP/UDP) are open only to a list of IP/CIDR. The default is the Tailscale range 100.64.0.0/10; change it to the GCS addresses."
+  },
+  "values": {
+    "VPS_UPLINK_PORT": "14555",
+    "VPS_GCS_TCP_PORT": "5760",
+    "VPS_GCS_UDP_PORT": "14550",
+    "VPS_DOMAIN": "mav.dgp.vn",
+    "VPS_INSTALL_WEB": "1",
+    "WEB_BACKEND": "python",
+    "VPS_INSTALL_NGINX": "1",
+    "VPS_ENABLE_TLS": "1",
+    "WEB_AUTH": "1",
+    "VPS_ENABLE_UFW": "1",
+    "VPS_GCS_ALLOW_FROM": "100.64.0.0/10",
+    "VPS_FAIL2BAN": "1",
+    "SSH_HARDEN": "1",
+    "SERVICE_SANDBOX": "1"
+  },
+  "ask": ["VPS_GCS_ALLOW_FROM"]
+}

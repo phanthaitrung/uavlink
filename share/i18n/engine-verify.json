@@ -1,0 +1,118 @@
+{
+  "env.wsl": {
+    "en": "The system runs under WSL, so it is not changed",
+    "vi": "Hệ thống đang chạy trong WSL nên không được thay đổi"
+  },
+  "internet.fail": {
+    "en": "Internet is not reachable",
+    "vi": "Chưa có kết nối Internet"
+  },
+  "internet.ok": {
+    "en": "Internet is reachable",
+    "vi": "Đã có kết nối Internet"
+  },
+  "lan.addr.fail": {
+    "en": "Port {iface} does not have address {ip}",
+    "vi": "Cổng {iface} chưa có địa chỉ {ip}"
+  },
+  "lan.addr.ok": {
+    "en": "Port {iface} has address {ip}",
+    "vi": "Cổng {iface} có địa chỉ {ip}"
+  },
+  "lan.link.fail": {
+    "en": "Port {iface} has no link. Check the network cable.",
+    "vi": "Cổng {iface} chưa có tín hiệu liên kết. Kiểm tra cáp mạng."
+  },
+  "lan.link.ok": {
+    "en": "Port {iface} has a link",
+    "vi": "Cổng {iface} có tín hiệu liên kết"
+  },
+  "lan.route.fail": {
+    "en": "The default Internet route goes through {iface}",
+    "vi": "Tuyến Internet mặc định đang đi qua {iface}"
+  },
+  "lan.route.ok": {
+    "en": "The default Internet route does not use {iface}",
+    "vi": "Tuyến Internet mặc định không đi qua {iface}"
+  },
+  "mavlink.two_way.fail": {
+    "en": "No HEARTBEAT or parameter received through the MAVLink router",
+    "vi": "Không nhận được HEARTBEAT hoặc tham số qua bộ định tuyến MAVLink"
+  },
+  "mavlink.two_way.ok": {
+    "en": "HEARTBEAT received and parameter read through the MAVLink router",
+    "vi": "Đã nhận HEARTBEAT và đọc được tham số qua bộ định tuyến MAVLink"
+  },
+  "router.active.fail": {
+    "en": "Service {unit} is not running",
+    "vi": "Dịch vụ {unit} chưa chạy"
+  },
+  "router.active.ok": {
+    "en": "Service {unit} is running",
+    "vi": "Dịch vụ {unit} đang chạy"
+  },
+  "router.not_root.fail": {
+    "en": "Service {unit} runs as root",
+    "vi": "Dịch vụ {unit} đang chạy với quyền root"
+  },
+  "router.not_root.ok": {
+    "en": "Service {unit} does not run as root",
+    "vi": "Dịch vụ {unit} không chạy với quyền root"
+  },
+  "signing.enforced.fail": {
+    "en": "X25 flight controller still accepts unsigned commands",
+    "vi": "Mạch bay X25 vẫn nhận lệnh không có chữ ký"
+  },
+  "signing.enforced.ok": {
+    "en": "X25 flight controller accepts only commands with MAVLink2 signing",
+    "vi": "Mạch bay X25 chỉ nhận lệnh có ký MAVLink2"
+  },
+  "ssh.no_password.fail": {
+    "en": "SSH still accepts password login",
+    "vi": "SSH vẫn nhận đăng nhập bằng mật khẩu"
+  },
+  "ssh.no_password.ok": {
+    "en": "SSH does not accept password login",
+    "vi": "SSH không nhận đăng nhập bằng mật khẩu"
+  },
+  "ufw.active.fail": {
+    "en": "UFW firewall is not active",
+    "vi": "Tường lửa UFW chưa bật"
+  },
+  "ufw.active.ok": {
+    "en": "UFW firewall is active",
+    "vi": "Tường lửa UFW đang bật"
+  },
+  "uninstall.nothing": {
+    "en": "No change record (manifest), so there is nothing to undo",
+    "vi": "Không có bản ghi thay đổi (manifest) nên không có gì cần gỡ"
+  },
+  "uninstall.partial": {
+    "en": "Some changes could not be undone. See the log for details.",
+    "vi": "Một số thay đổi chưa gỡ được. Xem chi tiết trong nhật ký."
+  },
+  "vps.uplink.fail": {
+    "en": "No packets sent to the relay server (VPS) {ip}:{port}",
+    "vi": "Không có gói tin gửi tới máy chủ chuyển tiếp (VPS) {ip}:{port}"
+  },
+  "vps.uplink.ok": {
+    "en": "Telemetry is being sent to the relay server (VPS) {ip}:{port}",
+    "vi": "Đang gửi telemetry tới máy chủ chuyển tiếp (VPS) {ip}:{port}"
+  },
+  "x25.ping.fail": {
+    "en": "X25 flight controller {ip} does not answer ping",
+    "vi": "Mạch bay X25 {ip} không trả lời ping"
+  },
+  "x25.ping.ok": {
+    "en": "X25 flight controller {ip} answers ping",
+    "vi": "Mạch bay X25 {ip} trả lời ping"
+  },
+  "x25.udp_in.fail": {
+    "en": "No UDP from the X25 flight controller {ip} to port {port}",
+    "vi": "Không nhận được UDP từ mạch bay X25 {ip} tới cổng {port}"
+  },
+  "x25.udp_in.ok": {
+    "en": "X25 flight controller is sending UDP to port {port}",
+    "vi": "Mạch bay X25 đang gửi UDP tới cổng {port}"
+  }
+}

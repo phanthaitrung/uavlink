@@ -1,0 +1,22 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    remove|purge)
+        if [ -d /usr/lib/uavlink ]; then
+            find /usr/lib/uavlink -name __pycache__ -type d -prune -exec rm -rf {} + 2>/dev/null || true
+        fi
+        ;;
+esac
+
+if [ "$1" = "purge" ]; then
+    if [ -f /var/lib/uavlink/uninstall.sh ]; then
+        echo "uavlink: running /var/lib/uavlink/uninstall.sh --purge" >&2
+        bash /var/lib/uavlink/uninstall.sh --purge || echo "uavlink: uninstall.sh failed (ignored)" >&2
+    fi
+    rm -rf /etc/uavlink /var/lib/uavlink /run/uavlink
+fi
+
+#DEBHELPER#
+
+exit 0

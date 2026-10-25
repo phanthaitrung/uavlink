@@ -1,0 +1,205 @@
+{
+  "step.net.lan": {"vi": "Mạch bay X25 qua mạng LAN", "en": "X25 flight controller over LAN"},
+  "step.net.internet": {"vi": "Kết nối Internet", "en": "Internet connection"},
+  "step.net.vps": {"vi": "Đường truyền qua máy chủ chuyển tiếp (VPS)", "en": "Link through the relay server (VPS)"},
+  "step.net.gcs": {"vi": "Trạm điều khiển mặt đất (GCS) qua Tailscale", "en": "Ground control stations (GCS) over Tailscale"},
+  "step.net.cm5": {
+    "vi": "Cổng nghe và tường lửa của máy tính đồng hành CM5",
+    "en": "Listening ports and firewall of the CM5 companion computer"
+  },
+
+  "x25.lan_ping": {"vi": "Ping mạch bay X25 qua LAN", "en": "Ping to the X25 flight controller over LAN"},
+  "x25.lan_mavlink": {"vi": "MAVLink của mạch bay X25 qua LAN", "en": "MAVLink from the X25 flight controller over LAN"},
+  "internet": {"vi": "Kết nối Internet", "en": "Internet connection"},
+  "vps.dns": {"vi": "Phân giải tên máy chủ chuyển tiếp (VPS)", "en": "Name resolution of the relay server (VPS)"},
+  "vps.ping": {"vi": "Ping máy chủ chuyển tiếp (VPS)", "en": "Ping to the relay server (VPS)"},
+  "vps.tcp": {"vi": "Cổng TCP cho GCS trên VPS", "en": "GCS TCP port on the VPS"},
+  "vps.udp": {"vi": "Kiểm tra UDP qua VPS", "en": "UDP tests through the VPS"},
+  "vps.uplink": {"vi": "Chiều CM5 → VPS → GCS bên ngoài", "en": "Path CM5 → VPS → outside GCS"},
+  "vps.downlink": {"vi": "Chiều GCS bên ngoài → VPS → CM5", "en": "Path outside GCS → VPS → CM5"},
+  "vps.gcs_udp": {"vi": "Cổng UDP cho GCS trên VPS", "en": "GCS UDP port on the VPS"},
+  "vps.x25_via_vps": {"vi": "Mạch bay X25 được nhìn thấy qua VPS", "en": "X25 flight controller visible through the VPS"},
+  "vps.cmd_via_vps": {"vi": "Lệnh tới mạch bay X25 qua VPS", "en": "Command to the X25 flight controller through the VPS"},
+  "gcs.tailscale": {"vi": "GCS qua Tailscale", "en": "GCS over Tailscale"},
+  "cm5.listen": {"vi": "Cổng nghe của bộ định tuyến MAVLink", "en": "Listening ports of the MAVLink router"},
+  "cm5.firewall": {"vi": "Tường lửa cho MAVLink", "en": "Firewall for MAVLink"},
+
+  "net.mode.live": {
+    "vi": "Chế độ live: bộ định tuyến MAVLink trên máy này đang gửi lên VPS, chỉ dùng kết nối TCP tới VPS",
+    "en": "Live mode: the MAVLink router on this machine sends to the VPS, only TCP connections to the VPS are used"
+  },
+  "net.mode.probe": {
+    "vi": "Chế độ probe: máy này tự gửi gói thử lên VPS",
+    "en": "Probe mode: this machine sends its own test packets to the VPS"
+  },
+  "net.no_x25_ip": {
+    "vi": "Chưa đặt X25_IP nên bỏ qua kiểm tra mạch bay X25 qua LAN",
+    "en": "X25_IP is not set, so the X25 flight controller LAN checks are skipped"
+  },
+  "net.no_vps": {
+    "vi": "Chưa đặt VPS_PUBLIC_IP nên bỏ qua kiểm tra VPS",
+    "en": "VPS_PUBLIC_IP is not set, so the VPS checks are skipped"
+  },
+  "gcs.no_targets": {
+    "vi": "CM5_EXTRA_UDP_TARGETS không có đích GCS qua Tailscale",
+    "en": "CM5_EXTRA_UDP_TARGETS has no GCS target over Tailscale"
+  },
+  "gcs.no_tailscale": {
+    "vi": "Tailscale chưa được cài nên bỏ qua kiểm tra GCS qua Tailscale",
+    "en": "Tailscale is not installed, so the GCS checks over Tailscale are skipped"
+  },
+  "cm5.router_stopped": {
+    "vi": "Bộ định tuyến MAVLink chưa chạy, cổng nghe được kiểm tra sau khi áp dụng",
+    "en": "The MAVLink router is not running, its listening ports are checked after apply"
+  },
+
+  "x25.lan_ping.ok": {"vi": "Mạch bay X25 {ip} trả lời ping", "en": "The X25 flight controller {ip} answers ping"},
+  "x25.lan_ping.fail": {
+    "vi": "Mạch bay X25 {ip} không trả lời ping (ICMP có thể bị chặn)",
+    "en": "The X25 flight controller {ip} does not answer ping (ICMP may be blocked)"
+  },
+  "x25.lan_mavlink.ok": {
+    "vi": "Mạch bay X25 {ip} gửi HEARTBEAT tới cổng UDP {port} (sysid {sysid})",
+    "en": "The X25 flight controller {ip} sends HEARTBEAT to UDP port {port} (sysid {sysid})"
+  },
+  "x25.lan_mavlink.router": {
+    "vi": "Đã nhận HEARTBEAT của mạch bay X25 qua bộ định tuyến MAVLink (TCP {port}, sysid {sysid})",
+    "en": "HEARTBEAT of the X25 flight controller received through the MAVLink router (TCP {port}, sysid {sysid})"
+  },
+  "x25.lan_mavlink.fail": {
+    "vi": "Không nhận được HEARTBEAT của mạch bay X25 {ip} trên cổng UDP {port}. Kiểm tra cáp mạng và tham số NET_* của mạch bay X25.",
+    "en": "No HEARTBEAT from the X25 flight controller {ip} on UDP port {port}. Check the network cable and the NET_* parameters of the X25 flight controller."
+  },
+  "x25.lan_mavlink.router_fail": {
+    "vi": "Không nhận được HEARTBEAT của mạch bay X25 qua bộ định tuyến MAVLink (TCP {port})",
+    "en": "No HEARTBEAT of the X25 flight controller through the MAVLink router (TCP {port})"
+  },
+  "x25.lan_mavlink.port_busy": {
+    "vi": "Cổng UDP {port} đang do chương trình khác sử dụng, HEARTBEAT của mạch bay X25 chưa được kiểm tra",
+    "en": "UDP port {port} is used by another program, the HEARTBEAT of the X25 flight controller is not checked"
+  },
+  "internet.reachable": {"vi": "Đã có kết nối Internet ({host})", "en": "Internet is reachable ({host})"},
+  "internet.unreachable": {"vi": "Chưa có kết nối Internet", "en": "Internet is not reachable"},
+  "vps.dns.ok": {"vi": "Tên {host} được phân giải thành {ip}", "en": "Name {host} resolves to {ip}"},
+  "vps.dns.fail": {
+    "vi": "Không phân giải được tên {host}. Kiểm tra VPS_PUBLIC_IP và DNS.",
+    "en": "Name {host} does not resolve. Check VPS_PUBLIC_IP and DNS."
+  },
+  "vps.ping.ok": {"vi": "VPS {ip} trả lời ping", "en": "VPS {ip} answers ping"},
+  "vps.ping.fail": {
+    "vi": "VPS {ip} không trả lời ping (ICMP có thể bị chặn)",
+    "en": "VPS {ip} does not answer ping (ICMP may be blocked)"
+  },
+  "vps.tcp.ok": {
+    "vi": "Cổng TCP {port} cho GCS trên VPS {ip} nhận kết nối",
+    "en": "GCS TCP port {port} on VPS {ip} accepts connections"
+  },
+  "vps.tcp.refused": {
+    "vi": "VPS {ip} từ chối kết nối tới cổng TCP {port} cho GCS",
+    "en": "VPS {ip} refuses connections to GCS TCP port {port}"
+  },
+  "vps.tcp.timeout": {
+    "vi": "Hết thời gian chờ kết nối tới cổng TCP {port} cho GCS trên VPS {ip}",
+    "en": "The connection to GCS TCP port {port} on VPS {ip} timed out"
+  },
+  "vps.tcp.error": {
+    "vi": "Không kết nối được tới cổng TCP {port} cho GCS trên VPS {ip}",
+    "en": "Cannot connect to GCS TCP port {port} on VPS {ip}"
+  },
+  "vps.tcp.closed": {
+    "vi": "VPS {ip} đóng kết nối trên cổng TCP {port} cho GCS",
+    "en": "VPS {ip} closes the connection on GCS TCP port {port}"
+  },
+  "vps.tcp.not_mavlink": {
+    "vi": "Cổng TCP {port} trên VPS {ip} không trả về MAVLink",
+    "en": "TCP port {port} on VPS {ip} does not return MAVLink"
+  },
+  "vps.udp_skipped_live": {
+    "vi": "Máy bay sysid {sysid} đang hoạt động qua VPS nên kiểm tra UDP được bỏ qua để không làm gián đoạn",
+    "en": "Vehicle sysid {sysid} is live through the VPS, so the UDP tests are skipped to avoid disturbing it"
+  },
+  "vps.uplink.relayed": {
+    "vi": "HEARTBEAT gửi tới {ip}:{port} xuất hiện trên cổng TCP {tcp_port} cho GCS",
+    "en": "HEARTBEAT sent to {ip}:{port} comes out on GCS TCP port {tcp_port}"
+  },
+  "vps.uplink.lost": {
+    "vi": "HEARTBEAT gửi tới {ip}:{port} không xuất hiện trên cổng TCP {tcp_port} cho GCS. Kiểm tra VPS_UPLINK_PORT và tường lửa của VPS.",
+    "en": "HEARTBEAT sent to {ip}:{port} does not come out on GCS TCP port {tcp_port}. Check VPS_UPLINK_PORT and the VPS firewall."
+  },
+  "vps.downlink.relayed": {
+    "vi": "HEARTBEAT gửi từ cổng TCP {tcp_port} về tới máy này qua {ip}:{port}",
+    "en": "HEARTBEAT sent from TCP port {tcp_port} reaches this machine through {ip}:{port}"
+  },
+  "vps.downlink.lost": {
+    "vi": "HEARTBEAT gửi từ cổng TCP {tcp_port} không về tới máy này qua {ip}:{port}",
+    "en": "HEARTBEAT sent from TCP port {tcp_port} does not reach this machine through {ip}:{port}"
+  },
+  "vps.gcs_udp.ok": {
+    "vi": "Cổng UDP {port} cho GCS trên VPS {ip} trả lời bằng MAVLink",
+    "en": "GCS UDP port {port} on VPS {ip} answers with MAVLink"
+  },
+  "vps.gcs_udp.fail": {
+    "vi": "Cổng UDP {port} cho GCS trên VPS {ip} không trả lời",
+    "en": "GCS UDP port {port} on VPS {ip} does not answer"
+  },
+  "vps.gcs_udp_skipped_live": {
+    "vi": "GCS sysid {sysid} đang kết nối với VPS nên kiểm tra cổng UDP cho GCS được bỏ qua",
+    "en": "GCS sysid {sysid} is connected to the VPS, so the GCS UDP port test is skipped"
+  },
+  "vps.x25_via_vps.ok": {
+    "vi": "GCS bên ngoài nhìn thấy HEARTBEAT của mạch bay X25 qua VPS {ip}:{port} (sysid {sysid})",
+    "en": "An outside GCS sees the HEARTBEAT of the X25 flight controller through VPS {ip}:{port} (sysid {sysid})"
+  },
+  "vps.x25_via_vps.fail": {
+    "vi": "Không thấy HEARTBEAT của mạch bay X25 qua VPS {ip}:{port}",
+    "en": "No HEARTBEAT of the X25 flight controller through VPS {ip}:{port}"
+  },
+  "vps.cmd_via_vps.ok": {
+    "vi": "Mạch bay X25 trả lời lệnh đọc {param} qua VPS (giá trị {value})",
+    "en": "The X25 flight controller answers a {param} read through the VPS (value {value})"
+  },
+  "vps.cmd_via_vps.fail": {
+    "vi": "Mạch bay X25 không trả lời lệnh đọc {param} qua VPS. Kiểm tra đường lệnh và passphrase ký.",
+    "en": "The X25 flight controller does not answer a {param} read through the VPS. Check the command path and the signing passphrase."
+  },
+  "vps.cmd_no_passphrase": {
+    "vi": "Chưa có passphrase ký nên lệnh qua VPS chưa được kiểm tra",
+    "en": "No signing passphrase, so the command through the VPS is not checked"
+  },
+  "gcs.tailscale.ok": {"vi": "GCS {name} ({ip}) trả lời tailscale ping", "en": "GCS {name} ({ip}) answers tailscale ping"},
+  "gcs.tailscale.fail": {
+    "vi": "GCS {name} ({ip}) không trả lời tailscale ping",
+    "en": "GCS {name} ({ip}) does not answer tailscale ping"
+  },
+  "cm5.listen.ok": {
+    "vi": "Bộ định tuyến MAVLink nghe trên TCP {tcp} và UDP {udp}",
+    "en": "The MAVLink router listens on TCP {tcp} and UDP {udp}"
+  },
+  "cm5.listen.no_tcp": {"vi": "Không có chương trình nào nghe trên TCP {port}", "en": "Nothing listens on TCP {port}"},
+  "cm5.listen.no_udp": {"vi": "Không có chương trình nào nghe trên UDP {port}", "en": "Nothing listens on UDP {port}"},
+  "cm5.listen.none": {
+    "vi": "Không có chương trình nào nghe trên TCP {tcp} và UDP {udp}",
+    "en": "Nothing listens on TCP {tcp} or UDP {udp}"
+  },
+  "cm5.firewall.ok": {
+    "vi": "Tường lửa UFW cho MAVLink vào từ mạch bay X25 trên {iface} (UDP {port})",
+    "en": "The UFW firewall lets MAVLink in from the X25 flight controller on {iface} (UDP {port})"
+  },
+  "cm5.firewall.inactive": {
+    "vi": "Tường lửa UFW đang tắt nên không chặn MAVLink",
+    "en": "The UFW firewall is off, so it does not block MAVLink"
+  },
+  "cm5.firewall.absent": {
+    "vi": "Tường lửa UFW chưa được cài nên không chặn MAVLink",
+    "en": "The UFW firewall is not installed, so it does not block MAVLink"
+  },
+  "cm5.firewall.unknown": {"vi": "Không đọc được trạng thái tường lửa UFW", "en": "The UFW firewall state cannot be read"},
+  "cm5.firewall.no_x25": {
+    "vi": "Tường lửa UFW chặn MAVLink từ mạch bay X25 trên {iface} (UDP {port})",
+    "en": "The UFW firewall blocks MAVLink from the X25 flight controller on {iface} (UDP {port})"
+  },
+  "cm5.firewall.no_tailscale": {
+    "vi": "Tường lửa UFW chặn kết nối vào trên tailscale0",
+    "en": "The UFW firewall blocks incoming traffic on tailscale0"
+  }
+}

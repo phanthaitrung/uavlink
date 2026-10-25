@@ -1,0 +1,7 @@
+uavlink-router (4+git16.2362c62-1) noble; urgency=medium
+
+  * Initial package of mavlink-router v4-16-g2362c62
+    (commit 2362c620f483cef1edd574fb962a373a288e4b9e), installed under
+    /usr/lib/uavlink-router so that a hand-built router stays untouched.
+
+ -- tomphan <phanthaitrung@gmail.com>  Sat, 24 Oct 2026 10:00:00 +0700

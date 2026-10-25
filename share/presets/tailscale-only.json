@@ -1,0 +1,27 @@
+{
+  "id": "tailscale-only",
+  "role": "cm5",
+  "order": 30,
+  "star": false,
+  "name": {"vi": "Chỉ Tailscale", "en": "Tailscale only"},
+  "desc": {
+    "vi": "Mọi trạm điều khiển mặt đất (GCS) đều nằm trong tailnet, không cần VPS: CM5 gửi MAVLink tới danh sách địa chỉ Tailscale của các GCS. SSH chỉ qua Tailscale; MAVLink chỉ qua cổng LAN nối X25 và Tailscale. Ký MAVLink2 bật.",
+    "en": "Every ground control station (GCS) is in the tailnet and no VPS is needed: the CM5 sends MAVLink to the list of GCS Tailscale addresses. SSH only over Tailscale; MAVLink only over the X25 LAN port and Tailscale. MAVLink2 signing on."
+  },
+  "values": {
+    "CM5_LAN_IP": "192.168.50.2",
+    "CM5_ETH_EXTRA_ADDRS": "192.168.144.2/24",
+    "X25_IP": "192.168.50.1",
+    "X25_NETMASK": "24",
+    "VPS_PUBLIC_IP": "",
+    "CM5_EXTRA_UDP_TARGETS": "",
+    "CM5_INSTALL_TAILSCALE": "1",
+    "MAVLINK_SIGNING": "1",
+    "SSH_HARDEN": "1",
+    "CM5_ENABLE_UFW": "1",
+    "CM5_SSH_ALLOW_LAN": "0",
+    "CM5_MAVLINK_ALLOW_LAN": "0",
+    "SERVICE_SANDBOX": "1"
+  },
+  "ask": ["CM5_EXTRA_UDP_TARGETS"]
+}

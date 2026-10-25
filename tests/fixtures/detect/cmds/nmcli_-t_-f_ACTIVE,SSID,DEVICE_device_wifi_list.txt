@@ -1,0 +1,2 @@
+no:Neighbour:wlan0
+yes:Home\: 5G:wlan0

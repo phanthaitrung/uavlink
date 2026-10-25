@@ -1,0 +1,27 @@
+Source: uavlink
+Section: net
+Priority: optional
+Maintainer: tomphan <phanthaitrung@gmail.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: uavlink
+Architecture: all
+Depends: ${misc:Depends},
+ uavlink-router,
+ python3 (>= 3.10),
+ python3-serial,
+ iproute2,
+ iputils-ping,
+ ufw,
+ chrony | time-daemon,
+ tcpdump,
+ curl
+Description: MAVLink companion-computer setup (CM5 + flight controller)
+ uavlink installs and configures the MAVLink link between a Raspberry Pi
+ CM5 companion computer, the flight controller and a ground station or VPS.
+ .
+ Installing the package changes nothing on the running system. Run
+ "sudo uavlink setup" to open the bilingual (Vietnamese/English) setup page,
+ or use the "uavlink" command line tool.

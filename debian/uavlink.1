@@ -1,0 +1,131 @@
+.TH UAVLINK 1 "October 2026" "uavlink 0.1.0" "User Commands"
+.SH NAME
+uavlink \- set up the MAVLink link of a CM5 companion computer
+.SH SYNOPSIS
+.B uavlink
+.I command
+.RI [ options ]
+.br
+.B uavlink
+.RB [ \-h | \-\-help | \-\-version ]
+.SH DESCRIPTION
+.B uavlink
+configures the MAVLink link between a Raspberry Pi CM5 companion computer, its flight controller (X25) and a ground
+station or VPS: the router
+.RB ( uavlink\-router.service ),
+network, firewall, SSH and time settings, and the flight controller parameters.
+.PP
+Installing the package changes nothing. Changes are made by
+.B apply
+(or the setup page) from a preset plus your values, are recorded, and are undone by
+.BR uninstall .
+Commands that change the system need root.
+.SH COMMANDS
+.TP
+\fBsetup\fR [\fB\-\-lan\fR] [\fB\-\-port\fR \fIN\fR] [\fB\-\-foreground\fR] [\fB\-\-no\-browser\fR]
+Start the temporary setup server
+.RB ( uavlink\-setup.service )
+and print the address of the setup page, with its access token.
+.B \-\-lan
+listens on all interfaces instead of 127.0.0.1,
+.B \-\-port
+changes the port (default 8090),
+.B \-\-foreground
+runs the server in this process and
+.B \-\-no\-browser
+does not open a browser. The server stops after 30 minutes without requests.
+.TP
+\fBserve\fR [\fB\-\-listen\fR \fIADDR\fR] [\fB\-\-port\fR \fIN\fR] [\fB\-\-idle\fR \fISECS\fR]
+Run the setup server in the foreground; this is what
+.B uavlink\-setup.service
+runs.
+.TP
+\fBapply \-\-preset\fR \fIID\fR [\fB\-\-role cm5\fR|\fBvps\fR] [\fB\-\-set\fR \fIKEY\fB=\fIVALUE\fR]... [\fB\-\-preview\fR] [\fB\-\-yes\fR] [\fB\-\-props\-off\fR] [\fB\-\-json\fR] [\fB\-\-verbose\fR]
+Apply a preset to this machine.
+.B \-\-set
+overrides one value and can be repeated,
+.B \-\-preview
+shows what would change and writes nothing,
+.B \-\-yes
+does not ask for confirmation,
+.B \-\-props\-off
+states that the propellers are removed, which allows the flight controller to be configured.
+.B \-\-json
+prints the raw events, one per line, and
+.B \-\-verbose
+shows file diffs and engine output.
+When the firewall or SSH settings change over an SSH session, they are rolled back automatically unless
+.B uavlink confirm
+is run from a new SSH session in time.
+.TP
+\fBpresets\fR [\fB\-\-role cm5\fR|\fBvps\fR]
+List the presets.
+.TP
+\fBconfig show\fR
+Print the saved configuration (secrets masked).
+.TP
+\fBconfig get\fR \fIKEY\fR
+Print one saved value.
+.TP
+\fBconfig set\fR \fIKEY\fB=\fIVALUE\fR...
+Change saved values; they take effect at the next
+.BR apply .
+.TP
+\fBstatus\fR
+Show the state of the uavlink services and the time of the last apply and the last verify.
+.TP
+\fBverify\fR [\fB\-\-json\fR] [\fB\-\-verbose\fR]
+Run the acceptance checks of the applied configuration.
+.TP
+\fBconfirm\fR
+Confirm the firewall/SSH change and stop the rollback timer
+.RB ( uavlink\-rollback.timer ).
+.TP
+\fBx25 backups\fR
+List the backups of the flight controller parameters.
+.TP
+\fBx25 restore\fR \fIFILE\fR [\fB\-\-props\-off\fR] [\fB\-\-verbose\fR]
+Write a parameter backup back to the flight controller.
+.TP
+\fBuninstall\fR [\fB\-\-preview\fR] [\fB\-\-yes\fR] [\fB\-\-verbose\fR]
+Undo every change made by
+.BR apply .
+.SH EXIT STATUS
+.TP
+.B 0
+Success.
+.TP
+.B 1
+Failure, including a failed check or a cancelled confirmation.
+.TP
+.B 2
+Usage error, unknown preset or invalid value.
+.TP
+.B 4
+Refused: root is required, another job is running, or the machine is not safe to change (vehicle armed, WSL).
+.SH FILES
+.TP
+.I /etc/uavlink/config.env
+Saved configuration.
+.TP
+.I /etc/uavlink/secrets.env
+Saved secrets, readable by root only.
+.TP
+.I /var/lib/uavlink/
+Record of the changes (used by
+.BR uninstall ),
+logs and flight controller parameter backups.
+.TP
+.I /usr/share/uavlink/presets/
+Presets.
+.SH EXAMPLES
+.nf
+sudo uavlink setup
+sudo uavlink apply \-\-preset dgp\-current \-\-preview
+sudo uavlink apply \-\-preset dgp\-current
+sudo uavlink confirm
+uavlink status
+.fi
+.SH SEE ALSO
+.BR systemctl (1),
+.BR ufw (8)

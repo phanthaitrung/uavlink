@@ -1,0 +1,14 @@
+[Unit]
+Description=uavlink setup page (temporary)
+Documentation=man:uavlink(1)
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/uavlink serve
+EnvironmentFile=-/run/uavlink/serve.env
+Restart=no
+RuntimeDirectory=uavlink
+RuntimeDirectoryPreserve=yes
+
+[Install]
+WantedBy=multi-user.target

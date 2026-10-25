@@ -1,0 +1,25 @@
+#!/usr/bin/make -f
+# Build without network access: all sources are in the orig tarball.
+
+# What "git describe" says for the packaged commit (see debian/patches/0001-*).
+export MAVLINK_ROUTER_GIT_VERSION = v4-16-g2362c62
+
+%:
+	dh $@ --buildsystem=meson
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		--bindir=lib/uavlink-router \
+		-Dsystemdsystemunitdir=/usr/lib/systemd/system \
+		-Db_lto=false
+
+# Install into debian/tmp, then pick files with debian/*.install (upstream also installs mavlink-router.service).
+override_dh_auto_install:
+	dh_auto_install --destdir=debian/tmp
+
+override_dh_strip:
+	dh_strip --no-automatic-dbgsym
+
+# Never enabled or started by the package; an upgrade restarts it only if it is running.
+override_dh_installsystemd:
+	dh_installsystemd --no-enable --no-start --no-stop-on-upgrade --name=uavlink-router

@@ -1,0 +1,14 @@
+[Unit]
+Description=MAVLink Router (uavlink)
+Documentation=https://github.com/mavlink-router/mavlink-router
+After=network-online.target
+Wants=network-online.target
+Conflicts=mavlink-router.service
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/uavlink-router/mavlink-routerd
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

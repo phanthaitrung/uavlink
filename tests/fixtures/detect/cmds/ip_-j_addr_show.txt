@@ -1,0 +1,4 @@
+[{"ifindex":1,"ifname":"lo","flags":["LOOPBACK","UP"],"address":"00:00:00:00:00:00","addr_info":[{"family":"inet","local":"127.0.0.1","prefixlen":8}]},
+{"ifindex":2,"ifname":"eth0","flags":["BROADCAST","MULTICAST","UP"],"address":"2c:cf:67:aa:bb:cc","addr_info":[{"family":"inet","local":"192.168.50.2","prefixlen":24},{"family":"inet","local":"192.168.144.2","prefixlen":24},{"family":"inet6","local":"fe80::1","prefixlen":64}]},
+{"ifindex":3,"ifname":"wlan0","flags":["BROADCAST","MULTICAST","UP"],"address":"2c:cf:67:dd:ee:ff","addr_info":[{"family":"inet","local":"192.168.1.37","prefixlen":24}]},
+{"ifindex":4,"ifname":"tailscale0","flags":["POINTOPOINT","UP"],"addr_info":[{"family":"inet","local":"100.88.1.2","prefixlen":32}]}]

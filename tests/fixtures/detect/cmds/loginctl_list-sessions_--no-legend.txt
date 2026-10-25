@@ -1,0 +1,2 @@
+      2 1000 pi seat0 tty1
+      c1 1000 pi seat0 -

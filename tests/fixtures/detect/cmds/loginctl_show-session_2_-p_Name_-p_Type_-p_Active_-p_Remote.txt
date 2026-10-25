@@ -1,0 +1,4 @@
+Name=pi
+Type=tty
+Active=yes
+Remote=no

@@ -1,0 +1,27 @@
+{
+  "id": "vps-minimal",
+  "role": "vps",
+  "order": 20,
+  "star": false,
+  "name": {"vi": "Relay tối giản", "en": "Minimal relay"},
+  "desc": {
+    "vi": "Chỉ có mavlink-router: không có Web Admin, Nginx, HTTPS và không cần tên miền. Tường lửa và fail2ban vẫn bật.",
+    "en": "mavlink-router only: no Web Admin, Nginx or HTTPS, and no domain name needed. Firewall and fail2ban stay on."
+  },
+  "values": {
+    "VPS_UPLINK_PORT": "14555",
+    "VPS_GCS_TCP_PORT": "5760",
+    "VPS_GCS_UDP_PORT": "14550",
+    "VPS_DOMAIN": "",
+    "VPS_INSTALL_WEB": "0",
+    "VPS_INSTALL_NGINX": "0",
+    "VPS_ENABLE_TLS": "0",
+    "WEB_AUTH": "0",
+    "VPS_ENABLE_UFW": "1",
+    "VPS_GCS_ALLOW_FROM": "any",
+    "VPS_FAIL2BAN": "1",
+    "SSH_HARDEN": "1",
+    "SERVICE_SANDBOX": "1"
+  },
+  "ask": []
+}

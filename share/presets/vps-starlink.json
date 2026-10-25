@@ -1,0 +1,27 @@
+{
+  "id": "vps-starlink",
+  "role": "cm5",
+  "order": 20,
+  "star": false,
+  "name": {"vi": "VPS qua Starlink", "en": "VPS over Starlink"},
+  "desc": {
+    "vi": "Bay thực địa với Internet từ Wi-Fi Starlink: CM5 gửi MAVLink lên máy chủ chuyển tiếp (VPS). Mạng X25 như mẫu Cấu hình mặc định. Ký MAVLink2 bật, tường lửa bật, SSH chỉ dùng khóa. Nhập địa chỉ VPS và tên/mật khẩu Wi-Fi Starlink.",
+    "en": "Field flights with Internet from a Starlink Wi-Fi: the CM5 sends MAVLink to the relay server (VPS). X25 network as in the Default configuration preset. MAVLink2 signing on, firewall on, SSH key-only. Enter the VPS address and the Starlink Wi-Fi name/password."
+  },
+  "values": {
+    "CM5_LAN_IP": "192.168.50.2",
+    "CM5_ETH_EXTRA_ADDRS": "192.168.144.2/24",
+    "X25_IP": "192.168.50.1",
+    "X25_NETMASK": "24",
+    "VPS_PUBLIC_IP": "",
+    "VPS_UPLINK_PORT": "14555",
+    "CM5_EXTRA_UDP_TARGETS": "",
+    "MAVLINK_SIGNING": "1",
+    "SSH_HARDEN": "1",
+    "CM5_ENABLE_UFW": "1",
+    "CM5_SSH_ALLOW_LAN": "1",
+    "CM5_MAVLINK_ALLOW_LAN": "0",
+    "SERVICE_SANDBOX": "1"
+  },
+  "ask": ["VPS_PUBLIC_IP", "CM5_WIFI_SSID"]
+}

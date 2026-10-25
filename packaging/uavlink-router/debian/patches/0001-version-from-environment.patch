@@ -1,0 +1,19 @@
+Description: Take the version string from MAVLINK_ROUTER_GIT_VERSION.
+ The orig tarball has no .git directory, so tools/meson-vcs-tag.sh would
+ report "VERSION". debian/rules exports the upstream git-describe string
+ (v4-16-g2362c62), which makes "mavlink-routerd --version" identify the commit.
+Author: tomphan <phanthaitrung@gmail.com>
+Forwarded: not-needed
+Last-Update: 2026-10-24
+
+--- a/tools/meson-vcs-tag.sh
++++ b/tools/meson-vcs-tag.sh
+@@ -3,7 +3,7 @@
+ set -e
+
+ dir=$1
+-GIT_VERSION=
++GIT_VERSION=${MAVLINK_ROUTER_GIT_VERSION:-}
+
+ cd $dir
+ if [ -e .git ]; then

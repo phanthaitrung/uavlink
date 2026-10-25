@@ -1,0 +1,11 @@
+# Tạo bởi cm5-x25-install: cổng LAN nối X25, không gateway
+network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: false
+      dhcp6: false
+      optional: true
+      addresses:
+        - 192.168.50.2/24
+        - 192.168.144.2/24

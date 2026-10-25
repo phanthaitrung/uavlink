@@ -1,0 +1,79 @@
+name: Release to PPA
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Build and sign the source packages but do not upload
+        type: boolean
+        default: true
+      series:
+        description: Ubuntu series, space separated
+        type: string
+        default: noble
+
+permissions:
+  contents: read
+
+env:
+  # Series every tagged release is uploaded for. Add a name (e.g. "noble plucky") to publish for more.
+  DEFAULT_SERIES: noble
+
+jobs:
+  source-packages:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            devscripts debhelper dput gnupg git xz-utils dpkg-dev
+
+      - name: Tag matches debian/changelog
+        if: github.ref_type == 'tag'
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          version="$(dpkg-parsechangelog -S Version)"
+          if [ "$TAG" != "v$version" ]; then
+            echo "tag $TAG does not match debian/changelog version $version" >&2
+            exit 1
+          fi
+
+      - name: Import signing key
+        id: key
+        env:
+          PPA_GPG_PRIVATE_KEY: ${{ secrets.PPA_GPG_PRIVATE_KEY }}
+        run: |
+          if [ -z "$PPA_GPG_PRIVATE_KEY" ]; then
+            echo "PPA_GPG_PRIVATE_KEY is not set: packages will be built unsigned" >&2
+            echo "key_id=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          printf '%s\n' "$PPA_GPG_PRIVATE_KEY" | gpg --batch --quiet --import 2>/dev/null
+          fpr="$(gpg --batch --list-secret-keys --with-colons | awk -F: '/^fpr:/ {print $10; exit}')"
+          test -n "$fpr"
+          echo "key_id=$fpr" >> "$GITHUB_OUTPUT"
+
+      - name: Build, sign, upload
+        env:
+          PPA_GPG_KEY_ID: ${{ steps.key.outputs.key_id }}
+          PPA_GPG_PASSPHRASE: ${{ secrets.PPA_GPG_PASSPHRASE }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+          SERIES: ${{ github.event_name == 'workflow_dispatch' && inputs.series || env.DEFAULT_SERIES }}
+        run: |
+          mode=--upload
+          if [ "$DRY_RUN" = true ]; then mode=--dry-run; fi
+          bash tools/ppa-upload.sh "$mode" --series "$SERIES"
+
+      - name: Keep source packages
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ppa-source-packages
+          path: out/ppa/
+          if-no-files-found: ignore

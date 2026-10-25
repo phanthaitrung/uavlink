@@ -1,0 +1,61 @@
+{
+  "step.packages": {"vi": "Gói hệ thống", "en": "System packages"},
+  "step.usb": {"vi": "Cổng USB của mạch bay X25", "en": "X25 flight controller USB port"},
+  "step.eth": {"vi": "Cổng LAN nối mạch bay X25", "en": "LAN port to the X25 flight controller"},
+  "step.wifi": {"vi": "Kết nối Wi-Fi", "en": "Wi-Fi connection"},
+  "step.tailscale": {"vi": "Kết nối Tailscale", "en": "Tailscale connection"},
+  "step.router": {"vi": "Bộ định tuyến MAVLink", "en": "MAVLink router"},
+  "step.security": {"vi": "Bảo mật hệ thống", "en": "System security"},
+  "step.env": {"vi": "Môi trường chạy", "en": "Runtime environment"},
+
+  "step.failed": {"vi": "Bước này bị lỗi. Xem chi tiết trong nhật ký.", "en": "This step failed. See the log for details."},
+  "env.wsl": {"vi": "Hệ thống đang chạy trong WSL nên không áp dụng thay đổi thật. Dùng chế độ xem trước hoặc cài đặt trên máy Linux thật.", "en": "The system runs under WSL, so real changes are refused. Use the preview or install on a real Linux machine."},
+  "env.not_root": {"vi": "Cần quyền root để áp dụng thay đổi.", "en": "Root privileges are required to apply changes."},
+  "user.missing": {"vi": "Máy này không có tài khoản \"{user}\". Đặt CM5_USER theo một tài khoản có trên máy.", "en": "User account \"{user}\" does not exist on this machine. Set CM5_USER to an existing account."},
+  "file.unreadable": {"vi": "Không đọc được {path} (cần quyền root) nên nội dung tệp chưa được so sánh.", "en": "{path} cannot be read (root required), so its content was not compared."},
+
+  "internet.up": {"vi": "Đã có kết nối Internet", "en": "Internet is reachable"},
+  "internet.down": {"vi": "Chưa có kết nối Internet", "en": "Internet is not reachable"},
+
+  "usb.x25_found": {"vi": "Đã nhận mạch bay X25 qua USB: {dev}", "en": "X25 flight controller detected over USB: {dev}"},
+  "usb.no_x25": {"vi": "Chưa nhận mạch bay X25 qua USB. Bước cấu hình mạch bay X25 cần cáp USB.", "en": "X25 flight controller not detected over USB. The X25 configuration step requires the USB cable."},
+
+  "eth.no_iface": {"vi": "Không có cổng mạng {iface}. Sửa tên cổng LAN nối mạch bay X25.", "en": "Network port {iface} does not exist. Correct the name of the LAN port to the X25 flight controller."},
+  "eth.default_route": {"vi": "Tuyến Internet mặc định đang đi qua {iface}. Cổng này dành riêng cho mạch bay X25; chuyển Internet sang Wi-Fi trước.", "en": "The default Internet route goes through {iface}. This port is reserved for the X25 flight controller; move Internet to Wi-Fi first."},
+  "eth.default_route_ok": {"vi": "Tuyến Internet mặc định không đi qua {iface}", "en": "The default Internet route does not use {iface}"},
+  "systemd.unreachable": {"vi": "systemd không trả lời (có thể đang được nâng cấp). Đã dừng để không ghi sai trạng thái dịch vụ; chạy lại sau ít phút.", "en": "systemd does not answer (it may be being upgraded). Stopped so that no wrong service state is recorded; run again in a few minutes."},
+  "eth.nm_not_running":{"vi": "NetworkManager được bật nhưng không chạy, nên không đặt được địa chỉ cho {iface}.", "en": "NetworkManager is enabled but does not run, so the address of {iface} cannot be set."},
+  "eth.no_netmgr": {"vi": "Không có NetworkManager hoặc netplan để đặt địa chỉ cho {iface}.", "en": "Neither NetworkManager nor netplan is available to set the address of {iface}."},
+  "lan.link_up": {"vi": "Cổng {iface} có tín hiệu liên kết", "en": "Port {iface} has a link"},
+  "lan.link_down": {"vi": "Cổng {iface} chưa có tín hiệu liên kết (mạch bay X25 chưa cấp nguồn hoặc chưa cắm cáp)", "en": "Port {iface} has no link (X25 flight controller not powered or cable unplugged)"},
+
+  "wifi.disabled": {"vi": "Bỏ qua cấu hình Wi-Fi (chưa nhập tên mạng)", "en": "Wi-Fi configuration skipped (no network name entered)"},
+  "wifi.already": {"vi": "Đã kết nối Wi-Fi \"{ssid}\"", "en": "Already connected to Wi-Fi \"{ssid}\""},
+  "wifi.no_nm": {"vi": "Cần NetworkManager (nmcli) để cấu hình Wi-Fi.", "en": "NetworkManager (nmcli) is required to configure Wi-Fi."},
+  "wifi.no_psk": {"vi": "Chưa có mật khẩu Wi-Fi.", "en": "The Wi-Fi password is missing."},
+  "wifi.connect_failed": {"vi": "Không kết nối được Wi-Fi \"{ssid}\" trên {iface}. Kiểm tra tên mạng và mật khẩu.", "en": "Could not connect to Wi-Fi \"{ssid}\" on {iface}. Check the network name and password."},
+
+  "tailscale.disabled": {"vi": "Tailscale không được bật trong cấu hình", "en": "Tailscale is not enabled in the configuration"},
+  "tailscale.already_up": {"vi": "Tailscale đã đăng nhập từ trước ({ip})", "en": "Tailscale is already logged in ({ip})"},
+  "tailscale.up": {"vi": "Tailscale đã đăng nhập ({ip})", "en": "Tailscale is logged in ({ip})"},
+  "tailscale.down": {"vi": "Tailscale chưa đăng nhập", "en": "Tailscale is not logged in"},
+  "tailscale.login_needed": {"vi": "Chưa có khóa xác thực Tailscale. Mở liên kết đăng nhập hiển thị trong nhật ký.", "en": "No Tailscale auth key. Open the login link shown in the log."},
+  "tailscale.login_pending": {"vi": "Đăng nhập Tailscale chưa hoàn tất. Mở liên kết đăng nhập rồi chạy lại bước này.", "en": "Tailscale login is not complete. Open the login link, then run this step again."},
+
+  "router.not_installed": {"vi": "Chưa cài gói uavlink-router (không có {path}).", "en": "The uavlink-router package is not installed ({path} is missing)."},
+  "router.hand_built_disabled": {"vi": "Đã tắt dịch vụ mavlink-router.service tự biên dịch trước đây; dịch vụ thay thế là uavlink-router.", "en": "The earlier hand-built mavlink-router.service was disabled; uavlink-router replaces it."},
+  "router.vps_resolve": {"vi": "Không phân giải được địa chỉ máy chủ chuyển tiếp (VPS) \"{host}\".", "en": "Cannot resolve the relay server (VPS) address \"{host}\"."},
+  "router.target_format": {"vi": "Đích UDP \"{target}\" sai định dạng; định dạng đúng là ten=ip:cong.", "en": "UDP target \"{target}\" is malformed; the expected format is name=ip:port."},
+  "router.target_resolve": {"vi": "Không phân giải được địa chỉ trong đích UDP \"{target}\".", "en": "Cannot resolve the address in UDP target \"{target}\"."},
+  "router.sandbox_fallback": {"vi": "Bộ định tuyến MAVLink không khởi động được trong sandbox nên đã khởi động lại với quyền root.", "en": "The MAVLink router did not start in the sandbox, so it was restarted with root privileges."},
+  "router.not_running": {"vi": "Bộ định tuyến MAVLink không khởi động được. Xem chi tiết trong nhật ký.", "en": "The MAVLink router does not start. See the log for details."},
+  "vps.reach_ok": {"vi": "Máy chủ chuyển tiếp (VPS) {host} trả lời ping", "en": "Relay server (VPS) {host} answers ping"},
+  "vps.unreachable": {"vi": "Máy chủ chuyển tiếp (VPS) {host} không trả lời ping (ICMP có thể bị chặn)", "en": "Relay server (VPS) {host} does not answer ping (ICMP may be blocked)"},
+
+  "ssh.keys_unknown": {"vi": "Không đọc được {path} (cần quyền root); coi như đã có khóa SSH.", "en": "{path} cannot be read (root required); SSH keys are assumed to be present."},
+  "ssh.no_keys": {"vi": "{path} chưa có khóa SSH nào nên đăng nhập SSH bằng mật khẩu được giữ nguyên để tránh mất quyền truy cập.", "en": "{path} has no SSH keys, so SSH password login stays enabled to prevent a lockout."},
+  "ssh.config_invalid": {"vi": "Cấu hình SSH vừa tạo không hợp lệ nên đã được gỡ bỏ.", "en": "The generated SSH configuration is invalid and was removed."},
+  "rollback.arm_failed": {"vi": "Không đặt được hẹn giờ tự hoàn tác; quá trình dừng trước khi thay đổi tường lửa và SSH.", "en": "Cannot set the automatic rollback timer; stopping before changing the firewall and SSH."},
+
+  "uninstall.missing": {"vi": "Không có tệp gỡ cài đặt nên chưa chép vào thư mục trạng thái.", "en": "The uninstall script is missing, so it was not copied to the state directory."}
+}

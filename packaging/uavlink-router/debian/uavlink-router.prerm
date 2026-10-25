@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+# Remove stops the router; an upgrade leaves it running until postinst does try-restart.
+if [ "$1" = remove ] && [ -d /run/systemd/system ]; then
+	deb-systemd-invoke stop uavlink-router.service || true
+fi
+
+#DEBHELPER#
+
+exit 0

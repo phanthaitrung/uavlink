@@ -1,0 +1,6 @@
+uavlink (0.1.0) noble; urgency=medium
+
+  * Initial release: CLI, setup server and page, CM5 engine, presets,
+    vendored pymavlink, manual page uavlink(1).
+
+ -- tomphan <phanthaitrung@gmail.com>  Sat, 24 Oct 2026 12:00:00 +0700

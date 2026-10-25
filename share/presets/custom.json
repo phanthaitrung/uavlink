@@ -1,0 +1,13 @@
+{
+  "id": "custom",
+  "role": "cm5",
+  "order": 60,
+  "star": false,
+  "name": {"vi": "Tùy chỉnh", "en": "Custom"},
+  "desc": {
+    "vi": "Bắt đầu từ các giá trị mặc định, sau đó điền từng trường ở bước 3.",
+    "en": "Start from the default values, then fill in each field in step 3."
+  },
+  "values": {},
+  "ask": []
+}

@@ -1,0 +1,139 @@
+{
+  "x25.connect": {"vi": "Kết nối USB tới mạch bay X25", "en": "USB connection to the X25 flight controller"},
+  "x25.backup": {"vi": "Sao lưu tham số mạch bay X25", "en": "X25 flight controller parameter backup"},
+  "x25.params": {"vi": "Cập nhật tham số mạng (NET_*)", "en": "Network parameter update (NET_*)"},
+  "x25.signing": {"vi": "Khóa ký MAVLink2 trên mạch bay X25", "en": "MAVLink2 signing key on the X25 flight controller"},
+  "x25.reboot": {"vi": "Khởi động lại mạch bay X25", "en": "X25 flight controller reboot"},
+  "x25.ethcheck": {"vi": "Kiểm tra MAVLink qua Ethernet", "en": "MAVLink check over Ethernet"},
+  "x25.usb": {"vi": "Mạch bay X25 được nhận qua USB", "en": "X25 flight controller detected over USB"},
+  "x25.disarmed": {"vi": "Mạch bay X25 đã DISARM", "en": "X25 flight controller is disarmed"},
+  "x25.firmware": {"vi": "Firmware ArduPilot {version}", "en": "ArduPilot firmware {version}"},
+  "x25.sensors": {"vi": "Cảm biến của mạch bay X25 hoạt động bình thường", "en": "X25 flight controller sensors are healthy"},
+  "x25.gps": {"vi": "GPS của mạch bay X25 có định vị 3D", "en": "X25 flight controller GPS has a 3D fix"},
+  "x25.battery": {"vi": "Mạch bay X25 báo điện áp pin", "en": "X25 flight controller reports the battery voltage"},
+  "x25.ekf": {"vi": "Bộ ước lượng EKF của mạch bay X25 ổn định", "en": "X25 flight controller EKF is healthy"},
+  "x25.prearm": {"vi": "Mạch bay X25 đạt kiểm tra trước khi ARM", "en": "X25 flight controller passes the pre-arm checks"},
+  "x25.status": {"vi": "Tình trạng mạch bay X25", "en": "X25 flight controller status"},
+  "x25.usb_found": {"vi": "Đã nhận mạch bay X25 tại {device}", "en": "X25 flight controller detected at {device}"},
+  "x25.sensors_ok": {"vi": "Toàn bộ cảm biến đang dùng báo hoạt động bình thường.", "en": "All enabled sensors report healthy."},
+  "x25.sensors_unhealthy": {"vi": "Cảm biến báo lỗi: {names}.", "en": "Sensors reporting a fault: {names}."},
+  "x25.no_sys_status": {
+    "vi": "Mạch bay X25 không gửi SYS_STATUS; chưa đọc được tình trạng cảm biến.",
+    "en": "The X25 flight controller sent no SYS_STATUS; sensor health is unknown."
+  },
+  "x25.gps_fix": {"vi": "GPS đã định vị 3D với {sats} vệ tinh.", "en": "GPS has a 3D fix with {sats} satellites."},
+  "x25.gps_no_fix": {
+    "vi": "GPS chưa định vị 3D ({sats} vệ tinh). Đặt máy bay ở nơi thông thoáng để thu tín hiệu vệ tinh.",
+    "en": "GPS has no 3D fix ({sats} satellites). Place the aircraft under open sky to receive the satellites."
+  },
+  "x25.gps_none": {
+    "vi": "Mạch bay X25 không báo GPS. Kiểm tra cáp GPS và tham số GPS_TYPE.",
+    "en": "The X25 flight controller reports no GPS. Check the GPS cable and the GPS_TYPE parameter."
+  },
+  "x25.battery_ok": {"vi": "Điện áp pin {voltage} V.", "en": "Battery voltage {voltage} V."},
+  "x25.battery_low": {
+    "vi": "Mạch bay X25 báo pin yếu hoặc lỗi đo pin ({voltage} V).",
+    "en": "The X25 flight controller reports a low battery or a battery monitor fault ({voltage} V)."
+  },
+  "x25.battery_absent": {
+    "vi": "Mạch bay X25 không báo điện áp pin: chỉ cấp nguồn qua USB hoặc chưa cấu hình BATT_MONITOR.",
+    "en": "The X25 flight controller reports no battery voltage: USB power only, or BATT_MONITOR is not configured."
+  },
+  "x25.ekf_ok": {"vi": "EKF ổn định.", "en": "The EKF is healthy."},
+  "x25.ekf_bad": {
+    "vi": "EKF chưa ổn định. Chờ mạch bay X25 khởi tạo xong rồi chạy lại kiểm tra trước.",
+    "en": "The EKF is not healthy yet. Wait for the X25 flight controller to finish initialising, then run the pre-check again."
+  },
+  "x25.ekf_missing": {"vi": "Mạch bay X25 không gửi EKF_STATUS_REPORT.", "en": "The X25 flight controller sent no EKF_STATUS_REPORT."},
+  "x25.prearm_ok": {"vi": "Không có thông báo PreArm.", "en": "No PreArm messages."},
+  "x25.prearm_failed": {
+    "vi": "Mạch bay X25 chưa đạt kiểm tra trước khi ARM: {text}",
+    "en": "The X25 flight controller fails a pre-arm check: {text}"
+  },
+  "x25.prearm_unhealthy": {
+    "vi": "Mạch bay X25 chưa đạt kiểm tra trước khi ARM.",
+    "en": "The X25 flight controller does not pass the pre-arm checks."
+  },
+  "x25.not_found": {
+    "vi": "Chưa nhận mạch bay X25 qua USB. Cắm cáp USB từ mạch bay X25 vào máy tính đồng hành CM5 rồi chạy lại.",
+    "en": "X25 flight controller not detected over USB. Connect the USB cable from the X25 flight controller to the CM5 companion computer, then run again."
+  },
+  "x25.armed": {
+    "vi": "Mạch bay X25 đang ARM. Chuyển sang DISARM và tháo cánh quạt trước khi chạy lại.",
+    "en": "The X25 flight controller is armed. Disarm it and remove the propellers before running again."
+  },
+  "x25.connect_failed": {
+    "vi": "Không kết nối được mạch bay X25 qua {device} sau {secs} giây.",
+    "en": "Could not connect to the X25 flight controller on {device} after {secs} s."
+  },
+  "x25.not_ardupilot": {
+    "vi": "Thiết bị trên cổng USB không chạy ArduPilot (autopilot={autopilot}).",
+    "en": "The device on the USB port is not running ArduPilot (autopilot={autopilot})."
+  },
+  "x25.no_ethernet": {
+    "vi": "Firmware không có tham số NET_ENABLE; bản ArduCopter này không hỗ trợ Ethernet.",
+    "en": "The firmware has no NET_ENABLE parameter; this ArduCopter build does not support Ethernet."
+  },
+  "x25.params_timeout": {
+    "vi": "Hết thời gian chờ tải tham số ({got}/{total}).",
+    "en": "Timed out while downloading parameters ({got}/{total})."
+  },
+  "x25.no_param_list": {
+    "vi": "Mạch bay X25 không phản hồi yêu cầu danh sách tham số.",
+    "en": "The X25 flight controller did not answer the parameter list request."
+  },
+  "x25.params_ok": {"vi": "Toàn bộ tham số mạng đã đúng; không cần ghi.", "en": "All network parameters are already correct; no write is needed."},
+  "x25.backup_written": {
+    "vi": "Đã sao lưu {count} tham số vào {file}",
+    "en": "Backed up {count} parameters to {file}"
+  },
+  "x25.backup_missing": {"vi": "Không tìm thấy tệp sao lưu {file}.", "en": "Backup file {file} not found."},
+  "x25.set_failed": {
+    "vi": "Mạch bay X25 không xác nhận lệnh ghi {name}={value}.",
+    "en": "The X25 flight controller did not confirm writing {name}={value}."
+  },
+  "x25.still_missing": {
+    "vi": "Sau khi khởi động lại vẫn thiếu các tham số: {names}.",
+    "en": "After the reboot these parameters are still missing: {names}."
+  },
+  "x25.ip_by_os": {
+    "vi": "Firmware không tự đặt địa chỉ IP của mạch (SITL hoặc mạch chạy Linux); bỏ qua {names}.",
+    "en": "The firmware does not set its own IP address (SITL or a Linux board); skipped: {names}."
+  },
+  "x25.not_configured": {
+    "vi": "Chưa cấu hình xong sau {rounds} vòng ghi và khởi động lại.",
+    "en": "Configuration not complete after {rounds} write-and-reboot rounds."
+  },
+  "x25.restore_partial": {
+    "vi": "Không khôi phục được các tham số: {names}.",
+    "en": "Could not restore these parameters: {names}."
+  },
+  "x25.reboot_refused": {
+    "vi": "Mạch bay X25 từ chối khởi động lại (MAV_RESULT={result}).",
+    "en": "The X25 flight controller refused to reboot (MAV_RESULT={result})."
+  },
+  "x25.no_passphrase": {
+    "vi": "Ký MAVLink2 đang bật nhưng chưa có passphrase ký (MAVLINK_SIGNING_PASSPHRASE).",
+    "en": "MAVLink2 signing is enabled but the signing passphrase is missing (MAVLINK_SIGNING_PASSPHRASE)."
+  },
+  "x25.signing_pending": {
+    "vi": "Khóa ký MAVLink2 sẽ được nạp vào mạch bay X25; sau đó cổng mạng chỉ nhận lệnh có chữ ký.",
+    "en": "The MAVLink2 signing key will be loaded onto the X25 flight controller; the network port then accepts signed commands only."
+  },
+  "x25.signing_set": {
+    "vi": "Đã nạp khóa ký MAVLink2 vào mạch bay X25.",
+    "en": "The MAVLink2 signing key was loaded onto the X25 flight controller."
+  },
+  "x25.signing_cleared": {
+    "vi": "Đã xóa khóa ký MAVLink2 trên mạch bay X25 (đã tắt ký).",
+    "en": "The MAVLink2 signing key was cleared on the X25 flight controller (signing disabled)."
+  },
+  "x25.ethcheck_failed": {
+    "vi": "MAVLink qua Ethernet không đạt kiểm tra. Kiểm tra cáp LAN, bộ định tuyến MAVLink và khóa ký.",
+    "en": "MAVLink over Ethernet did not pass the check. Check the LAN cable, the MAVLink router and the signing key."
+  },
+  "env.wsl": {
+    "vi": "Hệ thống đang chạy trong WSL: chỉ cho phép xem trước (--preview).",
+    "en": "The system runs inside WSL: only the preview (--preview) is allowed."
+  }
+}

@@ -1,0 +1,4 @@
+# The layout under /usr/lib/uavlink is fixed (ARCHITECTURE.md): py/ holds the Python package named uavlink and
+# engine/lib/ the shell libraries of the engine, so the repeated segments are intended.
+repeated-path-segment uavlink [usr/lib/uavlink/py/uavlink/]
+repeated-path-segment lib [usr/lib/uavlink/engine/lib/]

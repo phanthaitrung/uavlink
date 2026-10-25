@@ -1,0 +1,4 @@
+# Built for the uavlink PPA, not uploaded to Debian: there is no ITP bug to close.
+initial-upload-closes-no-bugs
+# Typos in upstream log strings ("Expresssion", "directoy", "unkown"); upstream code is not patched for them.
+spelling-error-in-binary * [usr/lib/uavlink-router/mavlink-routerd]

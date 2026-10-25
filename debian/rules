@@ -1,0 +1,39 @@
+#!/usr/bin/make -f
+# Directories are copied whole: other tickets fill engine/, share/, vendor/ and py/ in parallel.
+
+D = debian/uavlink
+LIB = $(D)/usr/lib/uavlink
+
+%:
+	dh $@
+
+override_dh_auto_build:
+
+override_dh_auto_test:
+
+override_dh_auto_install:
+	install -d $(D)/usr/bin $(LIB)/py $(LIB)/engine $(LIB)/vendor $(D)/usr/share/uavlink $(D)/usr/lib/systemd/system
+	install -m 0755 bin/uavlink $(D)/usr/bin/uavlink
+	install -m 0644 systemd/uavlink-setup.service $(D)/usr/lib/systemd/system/uavlink-setup.service
+	[ ! -d py ] || cp -r py/. $(LIB)/py/
+	[ ! -d engine ] || cp -r engine/. $(LIB)/engine/
+	[ ! -d vendor ] || cp -r vendor/. $(LIB)/vendor/
+	[ ! -d share ] || cp -r share/. $(D)/usr/share/uavlink/
+	find $(D) -name .gitkeep -delete
+	find $(D) -name __pycache__ -prune -exec rm -rf {} +
+	find $(D) -name '*.pyc' -delete
+	# Normalise modes: the source tree may come from a filesystem without exec bits. Scripts (#! first) are
+	# executable; sourced libraries such as engine/lib/*.sh are not.
+	find $(LIB) $(D)/usr/share/uavlink -type d -exec chmod 0755 {} +
+	find $(LIB) $(D)/usr/share/uavlink -type f -exec chmod 0644 {} +
+	find $(LIB)/engine $(LIB)/py $(LIB)/vendor -type f \( -name '*.sh' -o -name '*.py' \) | while read -r f; do \
+	  if [ "$$(head -c 2 "$$f")" = "#!" ]; then chmod 0755 "$$f"; fi; \
+	done
+	# Empty directories are legal in the package: keep the layout stable.
+	find $(LIB) $(D)/usr/share/uavlink -type d -empty -delete
+	install -d $(LIB)/py $(LIB)/engine $(LIB)/vendor $(D)/usr/share/uavlink
+
+# Python is not byte-compiled (launcher sets dont_write_bytecode) and not on the system path.
+override_dh_python3:
+
+override_dh_installsystemd:

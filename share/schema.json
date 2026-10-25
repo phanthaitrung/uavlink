@@ -1,0 +1,1153 @@
+{
+  "version": 1,
+  "tabs": [
+    {
+      "id": "network",
+      "roles": [
+        "cm5"
+      ],
+      "label": {
+        "vi": "Mạng CM5",
+        "en": "CM5 network"
+      }
+    },
+    {
+      "id": "x25",
+      "roles": [
+        "cm5"
+      ],
+      "label": {
+        "vi": "Mạch bay X25",
+        "en": "X25 flight controller"
+      }
+    },
+    {
+      "id": "links",
+      "roles": [
+        "cm5"
+      ],
+      "label": {
+        "vi": "Đường truyền MAVLink",
+        "en": "MAVLink links"
+      }
+    },
+    {
+      "id": "security",
+      "roles": [
+        "cm5",
+        "vps"
+      ],
+      "label": {
+        "vi": "Bảo mật",
+        "en": "Security"
+      }
+    },
+    {
+      "id": "wifi",
+      "roles": [
+        "cm5"
+      ],
+      "label": {
+        "vi": "Wi-Fi và Tailscale",
+        "en": "Wi-Fi and Tailscale"
+      }
+    },
+    {
+      "id": "vps",
+      "roles": [
+        "vps"
+      ],
+      "label": {
+        "vi": "Máy chủ chuyển tiếp (VPS)",
+        "en": "Relay server (VPS)"
+      }
+    },
+    {
+      "id": "web",
+      "roles": [
+        "vps"
+      ],
+      "label": {
+        "vi": "Web Admin",
+        "en": "Web Admin"
+      }
+    }
+  ],
+  "keys": {
+    "CM5_USER": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "network",
+      "type": "string",
+      "default": "",
+      "label": {
+        "vi": "Tài khoản Linux chạy dịch vụ",
+        "en": "Linux service account"
+      },
+      "help": {
+        "vi": "Tài khoản Linux dùng cho các dịch vụ và nhóm dialout. Khi để trống, hệ thống tự chọn: người dùng màn hình, nếu không có thì người chạy sudo, sau cùng là uid 1000.",
+        "en": "Linux account used for the services and the dialout group. When empty, the account is selected automatically: the desktop user, otherwise the sudo user, otherwise uid 1000."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": false,
+      "allow_empty": true
+    },
+    "CM5_ETH_IFACE": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "network",
+      "type": "iface",
+      "default": "eth0",
+      "label": {
+        "vi": "Cổng LAN nối với mạch bay X25",
+        "en": "LAN port to the X25 flight controller"
+      },
+      "help": {
+        "vi": "Tên cổng Ethernet của CM5 nối với X25 (xem bằng lệnh `ip -br link`).",
+        "en": "Name of the CM5 Ethernet port wired to the X25 (shown by `ip -br link`)."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true
+    },
+    "CM5_ETH_CON_NAME": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "network",
+      "type": "string",
+      "default": "x25-link",
+      "label": {
+        "vi": "Tên kết nối NetworkManager",
+        "en": "NetworkManager connection name"
+      },
+      "help": {
+        "vi": "Tên kết nối NetworkManager được tạo cho cổng LAN nối X25.",
+        "en": "Name of the NetworkManager connection created for the X25 LAN port."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": true
+    },
+    "CM5_LAN_IP": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "network",
+      "type": "ipv4",
+      "default": "192.168.50.2",
+      "label": {
+        "vi": "Địa chỉ IP của CM5 trên cổng LAN",
+        "en": "CM5 IP address on the LAN port"
+      },
+      "help": {
+        "vi": "Mạch bay X25 gửi MAVLink tới địa chỉ này. Địa chỉ phải cùng mạng con với địa chỉ IP của X25 và khác địa chỉ đó.",
+        "en": "The X25 flight controller sends MAVLink to this address. The address must be in the same subnet as the X25 IP address and differ from it."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true
+    },
+    "CM5_ETH_EXTRA_ADDRS": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "network",
+      "type": "cidr_list",
+      "default": "192.168.144.2/24",
+      "label": {
+        "vi": "Địa chỉ phụ trên cổng LAN",
+        "en": "Additional addresses on the LAN port"
+      },
+      "help": {
+        "vi": "Danh sách địa chỉ dạng a.b.c.d/n, cách nhau bằng dấu cách. Dải 192.168.144.x là dải mặc định của ArduPilot, được giữ để CM5 vẫn kết nối được với X25 chưa cấu hình. Để trống nếu không dùng.",
+        "en": "Space-separated list of a.b.c.d/n addresses. 192.168.144.x is the ArduPilot default range, kept so that the CM5 can still reach an unconfigured X25. Leave empty if not used."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": false,
+      "allow_empty": true,
+      "placeholder": "192.168.144.2/24"
+    },
+    "CM5_DISABLE_MODEMMANAGER": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "network",
+      "type": "bool",
+      "default": "1",
+      "label": {
+        "vi": "Tắt ModemManager",
+        "en": "Disable ModemManager"
+      },
+      "help": {
+        "vi": "Khi bật, ModemManager bị tắt để không chiếm cổng USB của X25.",
+        "en": "When on, ModemManager is disabled so that it does not take over the X25 USB port."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": true
+    },
+    "X25_IP": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "x25",
+      "type": "ipv4",
+      "default": "192.168.50.1",
+      "label": {
+        "vi": "Địa chỉ IP của mạch bay X25",
+        "en": "X25 flight controller IP address"
+      },
+      "help": {
+        "vi": "Địa chỉ mạng được ghi vào mạch bay X25 (tham số NET_*).",
+        "en": "Network address written into the X25 flight controller (NET_* parameters)."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true
+    },
+    "X25_NETMASK": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "x25",
+      "type": "int",
+      "default": "24",
+      "label": {
+        "vi": "Độ dài mặt nạ mạng con",
+        "en": "Subnet mask length"
+      },
+      "help": {
+        "vi": "Số bit của mặt nạ mạng con, ví dụ 24 tương ứng với 255.255.255.0.",
+        "en": "Subnet mask length in bits, for example 24 for 255.255.255.0."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true,
+      "min": 8,
+      "max": 30
+    },
+    "X25_GATEWAY": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "x25",
+      "type": "ipv4",
+      "default": "0.0.0.0",
+      "label": {
+        "vi": "Cổng mặc định của X25",
+        "en": "X25 default gateway"
+      },
+      "help": {
+        "vi": "Giá trị 0.0.0.0 nghĩa là X25 không dùng cổng mặc định.",
+        "en": "The value 0.0.0.0 means that the X25 uses no default gateway."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": true
+    },
+    "X25_SERIAL": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "x25",
+      "type": "string",
+      "default": "auto",
+      "label": {
+        "vi": "Cổng serial của X25",
+        "en": "X25 serial port"
+      },
+      "help": {
+        "vi": "Giá trị auto tự tìm /dev/serial/by-id/*ArduPilot*-if00. Có thể nhập đường dẫn thiết bị cụ thể.",
+        "en": "The value auto finds /dev/serial/by-id/*ArduPilot*-if00. A specific device path can be entered instead."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": true
+    },
+    "X25_BAUD": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "x25",
+      "type": "int",
+      "default": "115200",
+      "label": {
+        "vi": "Tốc độ baud của cổng serial",
+        "en": "Serial baud rate"
+      },
+      "help": {
+        "vi": "Tốc độ cổng serial dùng khi cấu hình X25.",
+        "en": "Serial port speed used when configuring the X25."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": true,
+      "min": 1200,
+      "max": 4000000
+    },
+    "X25_BACKUP_DIR": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "x25",
+      "type": "path",
+      "default": "/var/lib/uavlink/x25-backups",
+      "label": {
+        "vi": "Thư mục sao lưu tham số X25",
+        "en": "X25 parameter backup folder"
+      },
+      "help": {
+        "vi": "Thư mục trên CM5 lưu bản sao lưu tham số X25 trước khi tham số được thay đổi.",
+        "en": "Folder on the CM5 that keeps the X25 parameter backup before parameters are changed."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": true
+    },
+    "MAVLINK_LAN_PORT": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "x25",
+      "type": "port",
+      "default": "14550",
+      "label": {
+        "vi": "Cổng UDP nhận MAVLink từ X25",
+        "en": "UDP port for MAVLink from the X25"
+      },
+      "help": {
+        "vi": "Cổng UDP trên CM5 mà mạch bay X25 gửi MAVLink tới (NET_P1_PORT).",
+        "en": "UDP port on the CM5 to which the X25 flight controller sends MAVLink (NET_P1_PORT)."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true
+    },
+    "CM5_TCP_SERVER_PORT": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "links",
+      "type": "port",
+      "default": "5760",
+      "label": {
+        "vi": "Cổng TCP của CM5",
+        "en": "CM5 TCP port"
+      },
+      "help": {
+        "vi": "Cổng TCP server của mavlink-router trên CM5.",
+        "en": "TCP server port of mavlink-router on the CM5."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true
+    },
+    "CM5_EXTRA_UDP_TARGETS": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "links",
+      "type": "udp_targets",
+      "default": "ground_station_office=100.70.184.3:14550",
+      "label": {
+        "vi": "Đích UDP bổ sung",
+        "en": "Additional UDP targets"
+      },
+      "help": {
+        "vi": "Các đích nhận MAVLink từ CM5, dạng ten=ip:cong, cách nhau bằng dấu cách. Giá trị mặc định là máy văn phòng qua Tailscale. Để trống nếu không dùng.",
+        "en": "Targets that receive MAVLink from the CM5, as name=ip:port separated by spaces. The default is the office computer over Tailscale. Leave empty if not used."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": false,
+      "allow_empty": true,
+      "placeholder": "ten=100.64.0.1:14550"
+    },
+    "VPS_PUBLIC_IP": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "links",
+      "type": "host",
+      "default": "209.97.167.92",
+      "label": {
+        "vi": "Địa chỉ máy chủ chuyển tiếp (VPS)",
+        "en": "Relay server (VPS) address"
+      },
+      "help": {
+        "vi": "CM5 gửi MAVLink tới địa chỉ này (IP hoặc tên miền). Khi để trống, CM5 không gửi lên VPS và chỉ dùng LAN/Tailscale.",
+        "en": "The CM5 sends MAVLink to this address (IP or domain name). When empty, nothing is sent to a VPS and only LAN/Tailscale is used."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": false,
+      "allow_empty": true
+    },
+    "VPS_UPLINK_PORT": {
+      "roles": [
+        "cm5",
+        "vps"
+      ],
+      "tab": "links",
+      "type": "port",
+      "default": "14555",
+      "label": {
+        "vi": "Cổng UDP của VPS nhận MAVLink từ CM5",
+        "en": "VPS UDP port for MAVLink from the CM5"
+      },
+      "help": {
+        "vi": "Cổng UDP mà VPS nhận MAVLink từ CM5. CM5 và VPS phải dùng cùng giá trị.",
+        "en": "UDP port on which the VPS receives MAVLink from the CM5. The CM5 and the VPS must use the same value."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true,
+      "role_tabs": {
+        "vps": "vps"
+      }
+    },
+    "CM5_ROUTER_LOG_DIR": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "links",
+      "type": "path",
+      "default": "/var/log/mavlink-router",
+      "label": {
+        "vi": "Thư mục log chuyến bay",
+        "en": "Flight log folder"
+      },
+      "help": {
+        "vi": "Thư mục mavlink-router ghi log chuyến bay. Để trống để tắt ghi log.",
+        "en": "Folder where mavlink-router writes flight logs. Leave empty to turn logging off."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": false,
+      "allow_empty": true
+    },
+    "CM5_ROUTER_LOG_MODE": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "links",
+      "type": "enum",
+      "default": "while-armed",
+      "label": {
+        "vi": "Chế độ ghi log",
+        "en": "Logging mode"
+      },
+      "help": {
+        "vi": "Ghi log chỉ khi mạch bay X25 đang ARM, hoặc ghi liên tục.",
+        "en": "Log only while the X25 flight controller is armed, or log continuously."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": true,
+      "options": [
+        {
+          "value": "while-armed",
+          "label": {
+            "vi": "Chỉ khi đang ARM",
+            "en": "Only while armed"
+          }
+        },
+        {
+          "value": "always",
+          "label": {
+            "vi": "Liên tục",
+            "en": "Continuously"
+          }
+        }
+      ]
+    },
+    "ROUTER_REPORT_STATS": {
+      "roles": [
+        "cm5",
+        "vps"
+      ],
+      "tab": "links",
+      "type": "enum",
+      "default": "false",
+      "label": {
+        "vi": "In thống kê mavlink-router",
+        "en": "Print mavlink-router statistics"
+      },
+      "help": {
+        "vi": "Bật khi cần chẩn đoán: mavlink-router in thống kê vào journal sau mỗi vài giây.",
+        "en": "Turn on for diagnostics: mavlink-router prints statistics to the journal every few seconds."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": true,
+      "options": [
+        {
+          "value": "false",
+          "label": {
+            "vi": "Tắt",
+            "en": "Off"
+          }
+        },
+        {
+          "value": "true",
+          "label": {
+            "vi": "Bật",
+            "en": "On"
+          }
+        }
+      ],
+      "role_tabs": {
+        "vps": "vps"
+      }
+    },
+    "MAVLINK_SIGNING": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "security",
+      "type": "bool",
+      "default": "1",
+      "label": {
+        "vi": "Ký MAVLink2",
+        "en": "MAVLink2 signing"
+      },
+      "help": {
+        "vi": "Khi bật, mạch bay X25 chỉ nhận lệnh có chữ ký. GCS không có passphrase ký vẫn xem được telemetry nhưng không gửi được lệnh. Cáp USB luôn được miễn. Khi tắt, cấu hình ký trên mạch bay X25 được giữ nguyên.",
+        "en": "When on, the X25 flight controller accepts only signed commands. A GCS without the signing passphrase still sees telemetry but cannot send commands. The USB cable is always exempt. When off, the signing settings on the X25 flight controller are left unchanged."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true
+    },
+    "MAVLINK_SIGNING_PASSPHRASE": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "security",
+      "type": "passphrase",
+      "default": "",
+      "label": {
+        "vi": "Passphrase ký MAVLink2",
+        "en": "MAVLink2 signing passphrase"
+      },
+      "help": {
+        "vi": "Chỉ gồm chữ, số và các ký tự . _ -; tối thiểu 12 ký tự. Khi để trống, passphrase được tự sinh lúc lưu.",
+        "en": "Letters, digits and . _ - only; at least 12 characters. When empty, a passphrase is generated on save."
+      },
+      "advanced": false,
+      "secret": true,
+      "required": false,
+      "allow_empty": true,
+      "show_if": {
+        "MAVLINK_SIGNING": "1"
+      }
+    },
+    "SSH_HARDEN": {
+      "roles": [
+        "cm5",
+        "vps"
+      ],
+      "tab": "security",
+      "type": "bool",
+      "default": "1",
+      "label": {
+        "vi": "Đăng nhập SSH chỉ bằng khóa",
+        "en": "SSH key-only login"
+      },
+      "help": {
+        "vi": "Khi bật, SSH chỉ cho đăng nhập bằng khóa và root không đăng nhập được bằng mật khẩu. Kiểm tra khóa SSH đã có trong authorized_keys trước khi áp dụng.",
+        "en": "When on, SSH accepts key login only and root cannot log in with a password. Check that the SSH key is in authorized_keys before applying."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true
+    },
+    "CM5_ENABLE_UFW": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "security",
+      "type": "bool",
+      "default": "1",
+      "label": {
+        "vi": "Bật tường lửa",
+        "en": "Enable firewall"
+      },
+      "help": {
+        "vi": "Khi bật, CM5 dùng tường lửa ufw. MAVLink chỉ được nhận từ cổng LAN nối X25 và từ Tailscale.",
+        "en": "When on, the CM5 uses the ufw firewall. MAVLink is accepted only from the X25 LAN port and from Tailscale."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true
+    },
+    "CM5_SSH_ALLOW_LAN": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "security",
+      "type": "bool",
+      "default": "1",
+      "label": {
+        "vi": "Cho phép SSH từ Wi-Fi/LAN nội bộ",
+        "en": "Allow SSH from local Wi-Fi/LAN"
+      },
+      "help": {
+        "vi": "Khi tắt, SSH chỉ truy cập được qua Tailscale.",
+        "en": "When off, SSH is reachable only over Tailscale."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true,
+      "show_if": {
+        "CM5_ENABLE_UFW": "1"
+      }
+    },
+    "CM5_MAVLINK_ALLOW_LAN": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "security",
+      "type": "bool",
+      "default": "0",
+      "label": {
+        "vi": "Mở MAVLink cho Wi-Fi/LAN nội bộ",
+        "en": "Open MAVLink to local Wi-Fi/LAN"
+      },
+      "help": {
+        "vi": "Khi bật, tường lửa mở thêm cổng TCP của CM5 và cổng UDP MAVLink trên LAN cho mạng nội bộ. Chỉ dùng khi thử nghiệm trên bàn, không dùng khi bay.",
+        "en": "When on, the firewall also opens the CM5 TCP port and the MAVLink LAN UDP port to the local network. For bench tests only, not for flight."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true,
+      "show_if": {
+        "CM5_ENABLE_UFW": "1"
+      }
+    },
+    "SERVICE_SANDBOX": {
+      "roles": [
+        "cm5",
+        "vps"
+      ],
+      "tab": "security",
+      "type": "bool",
+      "default": "1",
+      "label": {
+        "vi": "Chạy dịch vụ không dùng quyền root",
+        "en": "Run services without root privileges"
+      },
+      "help": {
+        "vi": "mavlink-router và Web Admin chạy bằng tài khoản riêng, được systemd giới hạn quyền. Tắt khi cần thêm endpoint serial (/dev/tty*).",
+        "en": "mavlink-router and Web Admin run as a separate user, restricted by systemd. Turn off when extra serial endpoints (/dev/tty*) are needed."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": true
+    },
+    "FIREWALL_ROLLBACK_SECS": {
+      "roles": [
+        "cm5",
+        "vps"
+      ],
+      "tab": "security",
+      "type": "int",
+      "default": "180",
+      "label": {
+        "vi": "Hẹn giờ tự hoàn tác (giây)",
+        "en": "Automatic rollback timer (seconds)"
+      },
+      "help": {
+        "vi": "Thay đổi tường lửa/SSH tự hoàn tác sau số giây này nếu không có kết nối SSH mới xác nhận.",
+        "en": "Firewall/SSH changes are rolled back after this number of seconds unless a new SSH connection confirms them."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": true,
+      "min": 30,
+      "max": 3600
+    },
+    "CM5_WIFI_IFACE": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "wifi",
+      "type": "iface",
+      "default": "wlan0",
+      "label": {
+        "vi": "Cổng Wi-Fi của CM5",
+        "en": "CM5 Wi-Fi interface"
+      },
+      "help": {
+        "vi": "Tên cổng Wi-Fi của CM5.",
+        "en": "Name of the CM5 Wi-Fi interface."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": true
+    },
+    "CM5_WIFI_SSID": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "wifi",
+      "type": "string",
+      "default": "",
+      "label": {
+        "vi": "Tên Wi-Fi (SSID)",
+        "en": "Wi-Fi name (SSID)"
+      },
+      "help": {
+        "vi": "Mạng Wi-Fi cung cấp Internet, ví dụ từ Starlink hoặc điện thoại. Khi để trống, cấu hình Wi-Fi được giữ nguyên.",
+        "en": "Wi-Fi network that provides Internet, for example from Starlink or a phone. When empty, the Wi-Fi settings are left unchanged."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": false,
+      "allow_empty": true
+    },
+    "CM5_WIFI_PSK": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "wifi",
+      "type": "string",
+      "default": "",
+      "label": {
+        "vi": "Mật khẩu Wi-Fi",
+        "en": "Wi-Fi password"
+      },
+      "help": {
+        "vi": "Mật khẩu của mạng Wi-Fi nêu trên, được lưu trong secrets.env.",
+        "en": "Password of the Wi-Fi network above, stored in secrets.env."
+      },
+      "advanced": false,
+      "secret": true,
+      "required": false,
+      "allow_empty": true
+    },
+    "CM5_INSTALL_TAILSCALE": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "wifi",
+      "type": "bool",
+      "default": "1",
+      "label": {
+        "vi": "Cài đặt Tailscale",
+        "en": "Install Tailscale"
+      },
+      "help": {
+        "vi": "Cài đặt Tailscale để truy cập CM5 và gửi MAVLink qua mạng riêng.",
+        "en": "Installs Tailscale to reach the CM5 and send MAVLink over the private network."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true
+    },
+    "CM5_TS_HOSTNAME": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "wifi",
+      "type": "host",
+      "default": "cm5",
+      "label": {
+        "vi": "Tên máy trong Tailscale",
+        "en": "Tailscale host name"
+      },
+      "help": {
+        "vi": "Tên của CM5 hiển thị trong tailnet.",
+        "en": "Name of the CM5 shown in the tailnet."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": true,
+      "show_if": {
+        "CM5_INSTALL_TAILSCALE": "1"
+      }
+    },
+    "TS_AUTHKEY": {
+      "roles": [
+        "cm5"
+      ],
+      "tab": "wifi",
+      "type": "string",
+      "default": "",
+      "label": {
+        "vi": "Khóa xác thực Tailscale",
+        "en": "Tailscale auth key"
+      },
+      "help": {
+        "vi": "Khi để trống, tailscale in ra địa chỉ đăng nhập để xác thực thủ công. Khóa được lưu trong secrets.env.",
+        "en": "When empty, tailscale prints a login URL for manual sign-in. The key is stored in secrets.env."
+      },
+      "advanced": false,
+      "secret": true,
+      "required": false,
+      "allow_empty": true,
+      "show_if": {
+        "CM5_INSTALL_TAILSCALE": "1"
+      }
+    },
+    "VPS_DOMAIN": {
+      "roles": [
+        "vps"
+      ],
+      "tab": "vps",
+      "type": "host",
+      "default": "mav.dgp.vn",
+      "label": {
+        "vi": "Tên miền của VPS",
+        "en": "VPS domain name"
+      },
+      "help": {
+        "vi": "Để trống nếu không có tên miền; khi đó HTTPS cũng bị tắt.",
+        "en": "Leave empty if there is no domain name; HTTPS is then turned off as well."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": false,
+      "allow_empty": true
+    },
+    "VPS_GCS_TCP_PORT": {
+      "roles": [
+        "vps"
+      ],
+      "tab": "vps",
+      "type": "port",
+      "default": "5760",
+      "label": {
+        "vi": "Cổng TCP cho GCS",
+        "en": "TCP port for the GCS"
+      },
+      "help": {
+        "vi": "Cổng TCP cho trạm điều khiển mặt đất (GCS) như Mission Planner hoặc QGroundControl.",
+        "en": "TCP port for ground control stations (GCS) such as Mission Planner or QGroundControl."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true
+    },
+    "VPS_GCS_UDP_PORT": {
+      "roles": [
+        "vps"
+      ],
+      "tab": "vps",
+      "type": "port",
+      "default": "14550",
+      "label": {
+        "vi": "Cổng UDP cho GCS",
+        "en": "UDP port for the GCS"
+      },
+      "help": {
+        "vi": "Cổng UDP cho trạm điều khiển mặt đất (GCS) như Mission Planner hoặc QGroundControl.",
+        "en": "UDP port for ground control stations (GCS) such as Mission Planner or QGroundControl."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true
+    },
+    "VPS_ENABLE_UFW": {
+      "roles": [
+        "vps"
+      ],
+      "tab": "security",
+      "type": "bool",
+      "default": "1",
+      "label": {
+        "vi": "Bật tường lửa trên VPS",
+        "en": "Enable the VPS firewall"
+      },
+      "help": {
+        "vi": "Tường lửa chỉ mở SSH, cổng 80, 443, cổng nhận MAVLink từ CM5 và các cổng GCS.",
+        "en": "The firewall opens only SSH, ports 80 and 443, the CM5 uplink port and the GCS ports."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true
+    },
+    "VPS_GCS_ALLOW_FROM": {
+      "roles": [
+        "vps"
+      ],
+      "tab": "security",
+      "type": "source_list",
+      "default": "any",
+      "label": {
+        "vi": "Nguồn được phép kết nối cổng GCS",
+        "en": "Sources allowed on the GCS ports"
+      },
+      "help": {
+        "vi": "Giá trị any, hoặc danh sách IP/CIDR cách nhau bằng dấu cách.",
+        "en": "The value any, or a space-separated list of IP/CIDR."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true,
+      "show_if": {
+        "VPS_ENABLE_UFW": "1"
+      },
+      "placeholder": "any"
+    },
+    "VPS_FAIL2BAN": {
+      "roles": [
+        "vps"
+      ],
+      "tab": "security",
+      "type": "bool",
+      "default": "1",
+      "label": {
+        "vi": "Bật fail2ban",
+        "en": "Enable fail2ban"
+      },
+      "help": {
+        "vi": "Chặn các địa chỉ IP dò mật khẩu SSH và Web Admin.",
+        "en": "Blocks IP addresses that guess SSH or Web Admin passwords."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true
+    },
+    "VPS_INSTALL_WEB": {
+      "roles": [
+        "vps"
+      ],
+      "tab": "web",
+      "type": "bool",
+      "default": "1",
+      "label": {
+        "vi": "Cài đặt Web Admin",
+        "en": "Install Web Admin"
+      },
+      "help": {
+        "vi": "Cài đặt trang quản trị web (Web Admin).",
+        "en": "Installs the web administration page (Web Admin)."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true
+    },
+    "WEB_BACKEND": {
+      "roles": [
+        "vps"
+      ],
+      "tab": "web",
+      "type": "enum",
+      "default": "python",
+      "label": {
+        "vi": "Bản Web Admin",
+        "en": "Web Admin edition"
+      },
+      "help": {
+        "vi": "Hai bản có cùng API và giao diện; chuyển đổi giữa hai bản bằng cách áp dụng lại.",
+        "en": "Both editions have the same API and interface; switch between them by applying again."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true,
+      "show_if": {
+        "VPS_INSTALL_WEB": "1"
+      },
+      "options": [
+        {
+          "value": "python",
+          "label": {
+            "vi": "Python (FastAPI)",
+            "en": "Python (FastAPI)"
+          }
+        },
+        {
+          "value": "typescript",
+          "label": {
+            "vi": "TypeScript (Node.js)",
+            "en": "TypeScript (Node.js)"
+          }
+        }
+      ]
+    },
+    "NODE_VERSION": {
+      "roles": [
+        "vps"
+      ],
+      "tab": "web",
+      "type": "string",
+      "default": "24.22.1",
+      "label": {
+        "vi": "Phiên bản Node.js",
+        "en": "Node.js version"
+      },
+      "help": {
+        "vi": "Phiên bản Node.js LTS cho bản TypeScript (tải từ nodejs.org, có kiểm tra SHA-256).",
+        "en": "Node.js LTS version for the TypeScript edition (downloaded from nodejs.org, SHA-256 checked)."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": true,
+      "show_if": {
+        "WEB_BACKEND": "typescript"
+      }
+    },
+    "VPS_INSTALL_NGINX": {
+      "roles": [
+        "vps"
+      ],
+      "tab": "web",
+      "type": "bool",
+      "default": "1",
+      "label": {
+        "vi": "Cài đặt Nginx",
+        "en": "Install Nginx"
+      },
+      "help": {
+        "vi": "Nginx làm reverse proxy phía trước Web Admin.",
+        "en": "Nginx serves as a reverse proxy in front of Web Admin."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true,
+      "show_if": {
+        "VPS_INSTALL_WEB": "1"
+      }
+    },
+    "VPS_ENABLE_TLS": {
+      "roles": [
+        "vps"
+      ],
+      "tab": "web",
+      "type": "bool",
+      "default": "1",
+      "label": {
+        "vi": "Bật HTTPS",
+        "en": "Enable HTTPS"
+      },
+      "help": {
+        "vi": "Xin chứng chỉ Let's Encrypt cho tên miền. Yêu cầu tên miền ở tab Máy chủ chuyển tiếp (VPS).",
+        "en": "Obtains a Let's Encrypt certificate for the domain name. Requires the domain name on the Relay server (VPS) tab."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true,
+      "show_if": {
+        "VPS_INSTALL_NGINX": "1"
+      }
+    },
+    "LETSENCRYPT_EMAIL": {
+      "roles": [
+        "vps"
+      ],
+      "tab": "web",
+      "type": "string",
+      "default": "",
+      "label": {
+        "vi": "Email đăng ký Let's Encrypt",
+        "en": "Let's Encrypt registration email"
+      },
+      "help": {
+        "vi": "Khi để trống, việc đăng ký được thực hiện không kèm email.",
+        "en": "When empty, registration is done without an email address."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": false,
+      "allow_empty": true,
+      "show_if": {
+        "VPS_ENABLE_TLS": "1"
+      }
+    },
+    "WEB_PORT": {
+      "roles": [
+        "vps"
+      ],
+      "tab": "web",
+      "type": "port",
+      "default": "8000",
+      "label": {
+        "vi": "Cổng nội bộ Web Admin",
+        "en": "Web Admin internal port"
+      },
+      "help": {
+        "vi": "Web Admin chỉ lắng nghe tại 127.0.0.1 trên cổng này.",
+        "en": "Web Admin listens only on 127.0.0.1, on this port."
+      },
+      "advanced": true,
+      "secret": false,
+      "required": true,
+      "show_if": {
+        "VPS_INSTALL_WEB": "1"
+      }
+    },
+    "WEB_AUTH": {
+      "roles": [
+        "vps"
+      ],
+      "tab": "web",
+      "type": "bool",
+      "default": "1",
+      "label": {
+        "vi": "Yêu cầu đăng nhập",
+        "en": "Require login"
+      },
+      "help": {
+        "vi": "Web Admin yêu cầu đăng nhập bằng Basic Auth.",
+        "en": "Web Admin requires a Basic Auth login."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true,
+      "show_if": {
+        "VPS_INSTALL_WEB": "1"
+      }
+    },
+    "WEB_BASIC_AUTH_USER": {
+      "roles": [
+        "vps"
+      ],
+      "tab": "web",
+      "type": "string",
+      "default": "admin",
+      "label": {
+        "vi": "Tên đăng nhập Web Admin",
+        "en": "Web Admin login name"
+      },
+      "help": {
+        "vi": "Tên đăng nhập của Web Admin.",
+        "en": "Login name for Web Admin."
+      },
+      "advanced": false,
+      "secret": false,
+      "required": true,
+      "show_if": {
+        "WEB_AUTH": "1"
+      }
+    },
+    "WEB_BASIC_AUTH_PASS": {
+      "roles": [
+        "vps"
+      ],
+      "tab": "web",
+      "type": "string",
+      "default": "",
+      "label": {
+        "vi": "Mật khẩu Web Admin",
+        "en": "Web Admin password"
+      },
+      "help": {
+        "vi": "Mật khẩu được lưu trong secrets.env. Khi để trống, mật khẩu được tự sinh lúc cài đặt.",
+        "en": "Stored in secrets.env. When empty, a password is generated during installation."
+      },
+      "advanced": false,
+      "secret": true,
+      "required": false,
+      "allow_empty": true,
+      "show_if": {
+        "WEB_AUTH": "1"
+      }
+    }
+  }
+}
