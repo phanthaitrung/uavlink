@@ -116,6 +116,21 @@ class EthIdempotenceTest(unittest.TestCase):
         self.assertEqual(self.nm_changes(values), [("x25-link", "update")])
 
 
+class TailscaleStepTest(unittest.TestCase):
+    def test_already_logged_in_is_ok_not_skipped(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            shim = Path(tmp) / "tailscale"
+            shim.write_text('#!/bin/sh\n[ "$*" = "ip -4" ] && echo 100.64.70.74\n', newline="\n")
+            shim.chmod(0o755)
+            state = Path(tmp) / "state"
+            state.mkdir()
+            proc, events = run_install("--preview", "--steps", "tailscale", state_dir=state,
+                                       extra_env={"PATH": f"{tmp}:{os.environ['PATH']}"})
+        steps = [e for e in events if e["t"] == "step" and e["state"] != "start"]
+        self.assertEqual([(e["state"], e.get("code"), e.get("args")) for e in steps],
+                         [("ok", "tailscale.already_up", {"ip": "100.64.70.74"})], proc.stdout + proc.stderr)
+
+
 class RouterConfTest(unittest.TestCase):
     def test_render_matches_legacy_output_for_dgp_values(self):
         with tempfile.TemporaryDirectory() as state:

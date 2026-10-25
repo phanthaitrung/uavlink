@@ -9,6 +9,7 @@
   "step.env": {"vi": "Môi trường chạy", "en": "Runtime environment"},
 
   "step.failed": {"vi": "Bước này bị lỗi. Xem chi tiết trong nhật ký.", "en": "This step failed. See the log for details."},
+  "stage.not_run": {"vi": "Không chạy vì một giai đoạn trước bị lỗi.", "en": "Not run because an earlier stage failed."},
   "env.wsl": {"vi": "Hệ thống đang chạy trong WSL nên không áp dụng thay đổi thật. Dùng chế độ xem trước hoặc cài đặt trên máy Linux thật.", "en": "The system runs under WSL, so real changes are refused. Use the preview or install on a real Linux machine."},
   "env.not_root": {"vi": "Cần quyền root để áp dụng thay đổi.", "en": "Root privileges are required to apply changes."},
   "user.missing": {"vi": "Máy này không có tài khoản \"{user}\". Đặt CM5_USER theo một tài khoản có trên máy.", "en": "User account \"{user}\" does not exist on this machine. Set CM5_USER to an existing account."},

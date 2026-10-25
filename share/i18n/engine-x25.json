@@ -62,6 +62,14 @@
     "vi": "Mạch bay X25 đang ARM. Chuyển sang DISARM và tháo cánh quạt trước khi chạy lại.",
     "en": "The X25 flight controller is armed. Disarm it and remove the propellers before running again."
   },
+  "x25.props_not_off": {
+    "vi": "Chưa xác nhận đã tháo cánh quạt nên mạch bay X25 được giữ nguyên.",
+    "en": "Propeller removal is not confirmed, so the X25 flight controller is left as it is."
+  },
+  "x25.not_connected": {
+    "vi": "Chưa nhận mạch bay X25 qua USB nên mạch bay X25 được giữ nguyên.",
+    "en": "The X25 flight controller is not detected over USB, so it is left as it is."
+  },
   "x25.connect_failed": {
     "vi": "Không kết nối được mạch bay X25 qua {device} sau {secs} giây.",
     "en": "Could not connect to the X25 flight controller on {device} after {secs} s."

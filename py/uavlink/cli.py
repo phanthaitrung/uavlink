@@ -39,7 +39,10 @@ _S = {
     "no_key": {"vi": "Không có khóa '{key}'", "en": "No such key '{key}'"},
     "preview_title": {"vi": "Sẽ thay đổi (xem trước, chưa ghi gì):", "en": "Will change (preview, nothing written):"},
     "no_changes": {"vi": "Không có thay đổi nào.", "en": "No changes."},
-    "checks": {"vi": "Kiểm tra:", "en": "Checks:"},
+    "checks": {"vi": "Kiểm tra: {ok} đạt, {warn} cảnh báo, {fail} lỗi",
+               "en": "Checks: {ok} passed, {warn} with a warning, {fail} failed"},
+    "skipped": {"vi": "(bỏ qua)", "en": "(skipped)"},
+    "skipped_preview": {"vi": "(xem trước: bỏ qua)", "en": "(preview: skipped)"},
     "summary": {"vi": "Sắp áp dụng preset '{preset}' cho vai trò {role}.", "en": "About to apply preset '{preset}' for role {role}."},
     "will_set": {"vi": "Giá trị khác cấu hình hiện tại:", "en": "Values that differ from the current config:"},
     "confirm": {"vi": "Tiếp tục? [y/N] ", "en": "Continue? [y/N] "},
@@ -63,10 +66,8 @@ _S = {
     "status_applied": {"vi": "Lần áp dụng cuối", "en": "Last apply"},
     "status_verify": {"vi": "Lần kiểm tra cuối", "en": "Last verify"},
     "never": {"vi": "chưa có", "en": "none"},
+    # Stages the page never shows; the others are named by the page's texts (stage_name).
     "stage.role": {"vi": "Vai trò", "en": "Role"},
-    "stage.cm5": {"vi": "Cài đặt CM5", "en": "CM5 install"},
-    "stage.x25": {"vi": "Cấu hình X25", "en": "X25 setup"},
-    "stage.verify": {"vi": "Kiểm tra nghiệm thu", "en": "Acceptance checks"},
     "stage.uninstall": {"vi": "Gỡ cài đặt", "en": "Uninstall"},
 }
 
@@ -107,24 +108,59 @@ def _engine_messages():
     return _engine_cache
 
 
-def engine_text(code, args=None, msg=None):
-    """Text of an engine message code in the current language, else `msg`, else the code."""
+def _engine_known(code, args=None):
+    """Text of an engine message code in the current language, or None when there is none (or it lacks an arg)."""
     entry = _engine_messages().get(code) if code else None
     if isinstance(entry, dict) and entry.get(lang()):
         try:
             return entry[lang()].format_map(args or {})
         except (KeyError, ValueError, IndexError, AttributeError):
             pass
-    return msg or code or ""
+    return None
+
+
+def engine_text(code, args=None, msg=None):
+    """Text of an engine message code in the current language, else `msg`, else the code."""
+    return _engine_known(code, args) or msg or code or ""
+
+
+_ui_cache = {}
+
+
+def _ui_messages():
+    """The page's texts (share/web/i18n/<lang>.json) in the current language."""
+    if lang() not in _ui_cache:
+        try:
+            with open(paths.WEB_DIR / "i18n" / (lang() + ".json"), encoding="utf-8") as f:
+                _ui_cache[lang()] = json.load(f)
+        except (OSError, ValueError):
+            _ui_cache[lang()] = {}
+    return _ui_cache[lang()]
 
 
 def step_name(step_id):
-    return engine_text("step." + step_id, None, step_id)
+    """Engine text for "step.<id>" or "<id>" (x25 steps), else the id."""
+    return _engine_known("step." + step_id) or _engine_known(step_id) or step_id
 
 
 def stage_name(stage_id):
+    """The page's "stage.<id>" text (cm5, x25, net, verify), else this file's, else the id."""
     key = "stage." + stage_id
-    return _S[key][lang()] if key in _S else stage_id
+    return _ui_messages().get(key) or (_S[key][lang()] if key in _S else stage_id)
+
+
+def check_text(ev):
+    """Text of a check event's code, else the name of its id (x25.disarmed has no code when it passes)."""
+    args = ev.get("args")
+    return (_engine_known(ev.get("code"), args) or _engine_known(ev.get("id"), args)
+            or ev.get("msg") or ev.get("code") or ev.get("id", ""))
+
+
+def check_state(ev):
+    """"ok", "warn" (failed, but only a warning: severity "warn") or "fail", as on the page."""
+    if ev.get("ok") is True:
+        return "ok"
+    return "warn" if ev.get("severity") == "warn" else "fail"
 
 
 # ---- small helpers --------------------------------------------------------------------------------------------
@@ -244,12 +280,16 @@ def _validation_text(code, args):
 
 # ---- live output ----------------------------------------------------------------------------------------------
 
+CHECK_MARK = {"ok": "✔", "warn": "⚠", "fail": "✖"}       # also the marks of the step states with the same names
+
+
 class Progress:
     """Subscribes to a job and prints one line per stage/step; remembers changes, checks and the rollback state."""
 
-    def __init__(self, as_json=False, verbose=False):
+    def __init__(self, as_json=False, verbose=False, preview=False):
         self.as_json = as_json
         self.verbose = verbose
+        self.preview = preview
         self.changes = []
         self.checks = []
         self.rollback_secs = None
@@ -287,14 +327,17 @@ class Progress:
             elif state == "ok":
                 _out("✔ " + name)
             elif state == "skip":
-                _out("⚠ %s: %s" % (name, text or "skip"))
+                _out("⚠ %s: %s" % (name, text or t("skipped")))
             elif state == "fail":
                 _out("✖ %s%s" % (name, ": " + text if text else ""))
         elif kind == "step":
             state = ev.get("state")
-            mark = {"ok": "✔", "skip": "⚠", "warn": "⚠", "fail": "✖"}.get(state)
-            if mark:
-                _out("  %s %s%s" % (mark, step_name(ev["id"]), ": " + text if text else ""))
+            name = step_name(ev["id"])
+            if state == "skip":           # not a warning: a preview skips every X25 step that writes
+                _out("  – %s%s" % (name, ": " + text if text else
+                                    " " + t("skipped_preview" if self.preview else "skipped")))
+            elif state in CHECK_MARK:
+                _out("  %s %s%s" % (CHECK_MARK[state], name, ": " + text if text else ""))
         elif kind == "info":
             if text:
                 _out("  ℹ " + text)
@@ -331,10 +374,10 @@ def run_job(job, progress):
 def _print_checks(progress):
     if not progress.checks or progress.as_json:
         return
-    _out(t("checks"))
-    for ev in progress.checks:
-        text = engine_text(ev.get("code"), ev.get("args"), ev.get("msg")) or ev.get("id", "")
-        _out("  %s %s — %s" % ("✔" if ev.get("ok") else "✖", ev.get("id", ""), text))
+    states = [check_state(ev) for ev in progress.checks]
+    _out(t("checks", ok=states.count("ok"), warn=states.count("warn"), fail=states.count("fail")))
+    for ev, state in zip(progress.checks, states):
+        _out("  %s %s — %s" % (CHECK_MARK[state], ev.get("id", ""), check_text(ev)))
 
 
 def _print_change_table(progress):
@@ -400,7 +443,7 @@ def _apply_preview(args, role, values):
         except runner.Busy:
             _err(t("busy"))
             return REFUSED
-        progress = Progress(args.json, args.verbose)
+        progress = Progress(args.json, args.verbose, preview=True)
         code = run_job(job, progress)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -685,7 +728,7 @@ def cmd_uninstall(args):
     except runner.Busy:
         _err(t("busy"))
         return REFUSED
-    progress = Progress(False, args.verbose)
+    progress = Progress(False, args.verbose, preview=args.preview)
     code = run_job(job, progress)
     if args.preview:
         _out()

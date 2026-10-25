@@ -178,9 +178,9 @@ class ApplyTest(CliTestBase):
     def test_apply_as_root(self):
         code, out, _ = self.apply_real()
         self.assertEqual(code, 0, out)
-        self.assertIn("✔ CM5 install", out)
-        self.assertIn("✔ Acceptance checks", out)
-        self.assertIn("⚠ X25 setup", out)               # no X25 connected: skipped
+        self.assertIn("✔ CM5 companion computer setup", out)
+        self.assertIn("✔ Final verification", out)
+        self.assertIn("⚠ X25 flight controller: The X25 flight controller is not detected", out)   # skipped
         self.assertIn("config get MAVLINK_SIGNING_PASSPHRASE", out)
         self.assertIn("192.168.50.2", out)              # GCS info
         values, present = config.load_current()
@@ -222,7 +222,7 @@ class ApplyTest(CliTestBase):
         with mock.patch.object(detect, "x25_ports", lambda root="/": ["/dev/ttyACM0"]):
             _, out, err = self.run_cli("apply", "--preset", "dgp-current", "--yes", stdin="n\n")
         self.assertIn("PROPELLERS", err)
-        self.assertIn("⚠ X25 setup", out)               # answer no: flight controller untouched
+        self.assertIn("⚠ X25 flight controller: Propeller removal is not confirmed", out)  # answer no
 
     def test_rollback_hint_over_ssh_and_auto_confirm_on_console(self):
         progress = cli.Progress()
@@ -429,7 +429,7 @@ class StatusAndMiscTest(CliTestBase):
         with mock.patch.object(detect, "role_guess", lambda root="/": "cm5"):
             code, out, _ = self.run_cli("verify")
         self.assertEqual(code, 0)
-        self.assertIn("✔ Acceptance checks", out)
+        self.assertIn("✔ Final verification", out)
 
     def test_confirm(self):
         self.assertEqual(self.run_cli("confirm")[0], 4)
@@ -460,6 +460,101 @@ class StatusAndMiscTest(CliTestBase):
         self.assertIn("Will change", out)
 
 
+class OutputTest(CliTestBase):
+    """How a run is printed, from the events of the first pre-check on the real CM5."""
+    EVENTS = [
+        {"t": "stage", "id": "x25", "state": "start"},
+        {"t": "step", "id": "x25.backup", "state": "skip"},
+        {"t": "step", "id": "x25.params", "state": "ok", "code": "x25.params_ok"},
+        {"t": "stage", "id": "net", "state": "start"},
+        {"t": "step", "id": "net.lan", "state": "ok"},
+        {"t": "step", "id": "tailscale", "state": "ok", "code": "tailscale.already_up", "args": {"ip": "100.64.70.74"}},
+        {"t": "step", "id": "wifi", "state": "skip", "code": "wifi.disabled", "msg": "CM5_WIFI_SSID is empty"},
+        {"t": "step", "id": "no.such.step", "state": "warn"},
+        {"t": "stage", "id": "no_such_stage", "state": "start"},
+        {"t": "stage", "id": "verify", "state": "skip", "code": "stage.not_run", "msg": "an earlier stage failed"},
+        {"t": "check", "id": "x25.disarmed", "ok": True},
+        {"t": "check", "id": "x25.gps", "ok": False, "code": "x25.gps_none", "msg": "no GPS reported", "severity": "warn"},
+        {"t": "check", "id": "x25.usb", "ok": False, "code": "x25.not_found", "msg": "no X25 on USB"},
+    ]
+    EXPECT = {
+        "x25": "▶ X25 flight controller",
+        "net": "▶ Network path checks",
+        "unknown_stage": "▶ no_such_stage",
+        "not_run": "⚠ Final verification: Not run because an earlier stage failed.",
+        "params": "  ✔ Network parameter update (NET_*): All network parameters are already correct; no write is needed.",
+        "net_step": "  ✔ X25 flight controller over LAN",
+        "unknown_step": "  ⚠ no.such.step",
+        "tailscale": "  ✔ Tailscale connection: Tailscale is already logged in (100.64.70.74)",
+        "wifi": "  – Wi-Fi connection: Wi-Fi configuration skipped (no network name entered)",
+        "backup_preview": "  – X25 flight controller parameter backup (preview: skipped)",
+        "backup": "  – X25 flight controller parameter backup (skipped)",
+        "summary": "Checks: 1 passed, 1 with a warning, 1 failed",
+        "disarmed": "  ✔ x25.disarmed — X25 flight controller is disarmed",
+        "gps": "  ⚠ x25.gps — The X25 flight controller reports no GPS. Check the GPS cable and the GPS_TYPE parameter.",
+        "usb": "  ✖ x25.usb — X25 flight controller not detected over USB.",
+    }
+
+    def render(self, preview=True):
+        progress = cli.Progress(preview=preview)
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            for ev in self.EVENTS:
+                progress(ev)
+            cli._print_checks(progress)
+        return out.getvalue().splitlines()
+
+    def test_stage_and_step_names_are_translated(self):
+        lines = self.render()
+        for key in ("x25", "net", "unknown_stage", "not_run", "params", "net_step", "unknown_step"):
+            self.assertIn(self.EXPECT[key], lines)
+
+    def test_skipped_steps_are_not_warnings(self):
+        lines = self.render()
+        self.assertIn(self.EXPECT["backup_preview"], lines)
+        self.assertIn(self.EXPECT["wifi"], lines)
+        self.assertIn(self.EXPECT["backup"], self.render(preview=False))
+        steps = lines[:lines.index(self.EXPECT["summary"])]
+        self.assertEqual([line for line in steps if line.startswith("  ⚠")], [self.EXPECT["unknown_step"]])
+
+    def test_tailscale_already_logged_in_is_ok(self):
+        self.assertIn(self.EXPECT["tailscale"], self.render())
+
+    def test_warn_checks_print_and_count_as_warnings(self):
+        lines = self.render()
+        self.assertIn(self.EXPECT["summary"], lines)
+        self.assertIn(self.EXPECT["gps"], lines)
+        self.assertTrue(any(line.startswith(self.EXPECT["usb"]) for line in lines), lines)
+
+    def test_check_without_code_prints_its_name(self):
+        self.assertIn(self.EXPECT["disarmed"], self.render())
+
+    def test_preview_names_the_net_stage(self):
+        _, out, _ = self.run_cli("apply", "--preset", "dgp-current", "--preview")
+        self.assertIn(self.EXPECT["net"], out.splitlines())
+
+
+class VietnameseOutputTest(OutputTest):
+    lang = "vi_VN.UTF-8"
+    EXPECT = {
+        "x25": "▶ Mạch bay X25",
+        "net": "▶ Kiểm tra đường truyền mạng",
+        "unknown_stage": "▶ no_such_stage",
+        "not_run": "⚠ Kiểm tra cuối: Không chạy vì một giai đoạn trước bị lỗi.",
+        "params": "  ✔ Cập nhật tham số mạng (NET_*): Toàn bộ tham số mạng đã đúng; không cần ghi.",
+        "net_step": "  ✔ Mạch bay X25 qua mạng LAN",
+        "unknown_step": "  ⚠ no.such.step",
+        "tailscale": "  ✔ Kết nối Tailscale: Tailscale đã đăng nhập từ trước (100.64.70.74)",
+        "wifi": "  – Kết nối Wi-Fi: Bỏ qua cấu hình Wi-Fi (chưa nhập tên mạng)",
+        "backup_preview": "  – Sao lưu tham số mạch bay X25 (xem trước: bỏ qua)",
+        "backup": "  – Sao lưu tham số mạch bay X25 (bỏ qua)",
+        "summary": "Kiểm tra: 1 đạt, 1 cảnh báo, 1 lỗi",
+        "disarmed": "  ✔ x25.disarmed — Mạch bay X25 đã DISARM",
+        "gps": "  ⚠ x25.gps — Mạch bay X25 không báo GPS. Kiểm tra cáp GPS và tham số GPS_TYPE.",
+        "usb": "  ✖ x25.usb — Chưa nhận mạch bay X25 qua USB.",
+    }
+
+
 class VietnameseTest(CliTestBase):
     lang = "vi_VN.UTF-8"
 
@@ -474,7 +569,7 @@ class VietnameseTest(CliTestBase):
         code, out, _ = self.run_cli("apply", "--preset", "dgp-current", "--preview")
         self.assertEqual(code, 0)
         self.assertIn("Sẽ thay đổi", out)
-        self.assertIn("Cài đặt CM5", out)
+        self.assertIn("Cấu hình máy tính đồng hành CM5", out)
 
     def test_engine_codes_translated_and_fall_back_to_msg(self):
         self.assertIn("X25", cli.step_name("eth"))

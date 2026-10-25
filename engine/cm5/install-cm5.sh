@@ -371,7 +371,7 @@ step_tailscale() {
   if [ "$up" = 1 ]; then
     ip="$(tailscale ip -4 | head -1)"
     check_ev tailscale.up true tailscale.up "Tailscale đã đăng nhập: $ip" "Tailscale is logged in: $ip" "$(jobj ip "$ip")"
-    step_end skip tailscale.already_up "Tailscale already logged in" "$(jobj ip "$ip")"
+    step_end ok tailscale.already_up "Tailscale already logged in" "$(jobj ip "$ip")"
     return 0
   fi
   check_ev tailscale.up false tailscale.down "Tailscale chưa đăng nhập" "Tailscale is not logged in"
