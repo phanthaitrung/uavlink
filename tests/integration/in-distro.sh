@@ -11,6 +11,8 @@ PORT=8090
 BASE="http://127.0.0.1:$PORT"
 FAILS=0
 TMP="$(mktemp -d /var/tmp/uavlink-it.XXXXXX)"
+VER="$(sed -n '1s/^uavlink (\([^)]*\)).*/\1/p' "$REPO/debian/changelog")"   # no dpkg-dev in the fresh distro
+UP="$VER+test1"                                                              # the bumped build of make-repo.sh
 
 ok()   { printf '  ok    %s\n' "$*"; }
 bad()  { printf '  FAIL  %s\n' "$*"; FAILS=$((FAILS + 1)); }
@@ -21,8 +23,14 @@ has() { grep -Eq -- "$1" "$2"; }
 # Run a command on a pseudo terminal, like a person typing it; output in $TMP/tty.out.
 on_tty() { script -qec "$*" /dev/null >"$TMP/tty.out" 2>&1; }
 
+is_candidate() { [ "$(apt-cache policy uavlink | awk '/Candidate:/ {print $2}')" = "$1" ]; }
+installed_version() { dpkg-query -W -f='${Version}' uavlink; }
+
 secret_a='Qx7mLp2vNc9RtYb4WsKd8HfJ3GzA6eUo'      # MAVLINK_SIGNING_PASSPHRASE
 secret_b='tskey-auth-it-5f3a9c1e7b2d4a60'         # TS_AUTHKEY
+
+# A fresh distro starts unattended-upgrades soon after boot; apt waits for its dpkg lock instead of failing at once.
+echo 'DPkg::Lock::Timeout "900";' > /etc/apt/apt.conf.d/99uavlink-it-lock
 
 if [ "$PHASE" = install ]; then
 # ------------------------------------------------------------------ 0. the local repository
@@ -30,7 +38,8 @@ step "0. local apt repository"
 rm -rf "$LOCAL"; mkdir -p "$LOCAL"
 cp -r "$REPO/out/repo/." "$LOCAL/"
 echo "deb [trusted=yes] file:$LOCAL ./" > /etc/apt/sources.list.d/uavlink-local.list
-check "apt update sees the repository" bash -c 'apt-get update -qq && apt-cache policy uavlink | grep -q "Candidate: 0.1.0"'
+check "apt update" apt-get update -qq
+check "apt sees uavlink $VER" is_candidate "$VER"
 check "pristine: uavlink not installed" bash -c '! dpkg -s uavlink >/dev/null 2>&1'
 check "systemd is running" bash -c 'test -d /run/systemd/system'
 check "this is WSL" bash -c 'grep -qi microsoft /proc/sys/kernel/osrelease'
@@ -44,7 +53,7 @@ else
 fi
 check "uavlink-router came as a dependency" bash -c 'dpkg -s uavlink-router | grep -q "Status: install ok installed"'
 check "router binary at /usr/lib/uavlink-router/mavlink-routerd" test -x /usr/lib/uavlink-router/mavlink-routerd
-check "uavlink --version" bash -c 'uavlink --version | grep -q "uavlink 0.1.0"'
+check "uavlink --version says $VER" bash -c "uavlink --version | grep -qxF 'uavlink $VER'"
 check "install changed nothing: router service not enabled" bash -c '! systemctl is-enabled uavlink-router.service 2>/dev/null | grep -q "^enabled"'
 check "install changed nothing: no config written" bash -c '! test -e /etc/uavlink/config.env && ! test -e /var/lib/uavlink/manifest.tsv'
 check "postinst printed the setup URL with a token" has 'http://127\.0\.0\.1:8090/\?t=[A-Za-z0-9_-]+' "$TMP/install.out"
@@ -70,7 +79,7 @@ check "/api/state says WSL + preview_only" bash -c "python3 - '$TMP/state.json' 
 import json, sys
 s = json.load(open(sys.argv[1]))
 assert s['is_wsl'] is True and s['preview_only'] is True, (s['is_wsl'], s['preview_only'])
-assert s['version'] == '0.1.0', s['version']
+assert s['version'] == '$VER', s['version']
 assert any(p['id'] == 'dgp-current' for p in s['presets'])
 EOF"
 
@@ -165,7 +174,7 @@ check "setup server stopped" bash -c 'for i in $(seq 1 20); do systemctl is-acti
 check "nothing listens on 8090" bash -c '! curl -s -m 3 -o /dev/null http://127.0.0.1:8090/'
 
 # ------------------------------------------------------------------ 3. upgrade
-step "3. upgrade to 0.1.1"
+step "3. upgrade to $UP"
 echo "keep-me" > /etc/uavlink/marker
 echo "OPTION='kept'" >> /etc/uavlink/config.env
 cp /etc/uavlink/config.env "$TMP/config.env.before"
@@ -173,13 +182,13 @@ states() { for u in uavlink-router.service uavlink-setup.service uavlink-rollbac
 states > "$TMP/states.before"
 cp -r "$REPO/out/repo-upgrade/." "$LOCAL/"
 apt-get update -qq
-check "0.1.1 is the candidate" bash -c 'apt-cache policy uavlink | grep -q "Candidate: 0.1.1"'
+check "$UP is the candidate" is_candidate "$UP"
 if env -u DEBIAN_FRONTEND TERM=xterm bash -c 'script -qec "apt-get install -y --only-upgrade uavlink" /dev/null' >"$TMP/upgrade.out" 2>&1; then
   ok "apt-get install --only-upgrade uavlink"
 else
   bad "upgrade"; tail -30 "$TMP/upgrade.out"
 fi
-check "version is now 0.1.1" bash -c 'dpkg-query -W -f="\${Version}" uavlink | grep -qx 0.1.1'
+check "version is now $UP" test "$(installed_version)" = "$UP"
 check "upgrade did not print a setup URL (no browser/setup reopen)" bash -c "! grep -q '?t=' '$TMP/upgrade.out'"
 check "setup service did not start again" bash -c '! systemctl is-active --quiet uavlink-setup.service && ! test -e /run/uavlink/setup.json'
 check "/etc/uavlink kept" bash -c "test \"\$(cat /etc/uavlink/marker)\" = keep-me && cmp /etc/uavlink/config.env '$TMP/config.env.before'"

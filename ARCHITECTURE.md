@@ -15,7 +15,7 @@ engine is phase 4: applying it returns the error code `role.vps_not_ready`.
 
 | Package | Arch | Source | Contents |
 |---|---|---|---|
-| `uavlink` | all | `debian/` at repo root, format `3.0 (native)`, version `0.1.0` | CLI, setup server + page, engine, presets, vendored pymavlink |
+| `uavlink` | all | `debian/` at repo root, format `3.0 (native)`, version = top of `debian/changelog` (`VERSION` in `py/uavlink/__init__.py` and the man page follow it, checked by `tests/test_version.py`) | CLI, setup server + page, engine, presets, vendored pymavlink |
 | `uavlink-router` | any | `packaging/uavlink-router/`, its own source package, `3.0 (quilt)` | mavlink-router at commit `2362c620f483cef1edd574fb962a373a288e4b9e` |
 
 - Both must build **without network access** (Launchpad PPA builders have none). Upstream sources are fetched into the

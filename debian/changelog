@@ -1,3 +1,27 @@
+uavlink (0.1.2) noble; urgency=medium
+
+  * uavlink --version, the setup page and the saved apply record show the
+    package version again (0.1.1 still reported 0.1.0).
+  * Tests: the version in the code and the manual page must match this
+    changelog; the integration tests read it from here.
+
+ -- tomphan <phanthaitrung@gmail.com>  Mon, 26 Oct 2026 22:30:00 +0700
+
+uavlink (0.1.1) noble; urgency=medium
+
+  * First PPA release.
+  * Pre-check: X25 health snapshot (sensors, GPS, battery, EKF, pre-arm) and
+    network path checks (X25 over LAN, CM5 <-> VPS both ways, GCS ports).
+  * Fixes from the first real apply and uninstall in a container: rollback
+    no longer auto-confirmed under sudo over SSH, group membership recorded
+    in the manifest, unattended-upgrades kept on uninstall, and more.
+  * X25: works with pymavlink TCP/UDP addresses, firmware without host IP
+    parameters, step failures reported after a reboot.
+  * CLI: warnings shown as warnings, translated step and stage names.
+  * Formal Vietnamese/English texts on the setup page.
+
+ -- tomphan <phanthaitrung@gmail.com>  Sun, 25 Oct 2026 23:30:00 +0700
+
 uavlink (0.1.0) noble; urgency=medium
 
   * Initial release: CLI, setup server and page, CM5 engine, presets,

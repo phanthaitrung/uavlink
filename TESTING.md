@@ -24,7 +24,7 @@ Mọi lệnh dưới đây chạy trong **Git Bash**, thư mục gốc của rep
 ## 1. Dựng gói
 
 ```bash
-bash tools/build-deb.sh                      # gói uavlink  -> out/uavlink_0.1.0_all.deb
+bash tools/build-deb.sh                      # gói uavlink  -> out/uavlink_<phiên bản>_all.deb
 bash packaging/uavlink-router/build.sh       # gói uavlink-router -> out/uavlink-router_…_amd64.deb (cắt mạng khi build)
 ```
 
@@ -41,11 +41,12 @@ bash tests/integration/run.sh --keep       # giữ lại distro `uavlink-it` đ�
 
 Script làm theo thứ tự:
 
-1. Tạo kho apt cục bộ `out/repo` (và `out/repo-upgrade` có thêm bản `0.1.1` build tạm, không commit).
+1. Tạo kho apt cục bộ `out/repo` (và `out/repo-upgrade` có thêm bản `<phiên bản>+test1` build tạm, không commit).
+   Phiên bản lấy từ dòng đầu `debian/changelog`.
 2. Nhập distro mới `uavlink-it` từ ảnh sạch.
 3. Trong distro: cài `uavlink` bằng apt (kéo theo `uavlink-router`), kiểm tra URL có token, cookie, trang trả 200,
    `uavlink presets`, `uavlink apply --preset dgp-current --preview`, API `/api/precheck` + SSE, từ chối apply thật trên
-   WSL, nâng cấp lên 0.1.1, quét log tìm bí mật, rồi `apt purge` và kiểm tra khôi phục từ manifest mẫu.
+   WSL, nâng cấp lên `<phiên bản>+test1`, quét log tìm bí mật, rồi `apt purge` và kiểm tra khôi phục từ manifest mẫu.
 4. Chụp ảnh trang thật (VI và EN) bằng Edge ẩn → `out/screenshots/real/`.
 5. Hủy đăng ký distro (trừ khi có `--keep`).
 
@@ -136,7 +137,7 @@ sudo uavlink apply --preset dgp-current --yes         # phải bị TỪ CHỐI 
 ### 3.6 Nâng cấp và gỡ
 
 ```bash
-# nâng cấp: chép kho có bản 0.1.1 đè lên rồi cập nhật
+# nâng cấp: chép kho có bản <phiên bản>+test1 đè lên rồi cập nhật
 sudo cp -r /mnt/d/dynorch-projects/mavlink/uavlink/out/repo-upgrade/. /srv/uavlink-repo/
 sudo apt update && sudo apt install --only-upgrade uavlink
 # kỳ vọng: không mở lại trang cài đặt, /etc/uavlink còn nguyên, dịch vụ không đổi

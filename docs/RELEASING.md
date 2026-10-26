@@ -84,6 +84,8 @@ Phần đóng kèm giữ giấy phép riêng: `pymavlink` trong `vendor/` (LGPL-
 
 1. Sửa `debian/changelog`: dòng đầu là phiên bản mới (ví dụ `uavlink (0.2.0) noble; urgency=medium`, kèm mô tả thay đổi).
    Tên series (`noble`) ở đây chỉ là mặc định; script tự đổi thành `0.2.0~noble1` và đúng series khi build.
+   Sửa luôn `VERSION` trong `py/uavlink/__init__.py` và dòng `.TH` của `debian/uavlink.1` cho trùng; `tools/test.sh`
+   báo lỗi nếu quên (`tests/test_version.py`).
    Với `uavlink-router` chỉ sửa `packaging/uavlink-router/debian/changelog` khi router thay đổi.
 2. Commit, push lên `main`, chờ CI (tab **Actions**) xanh trên cả `ubuntu-24.04` và `ubuntu-24.04-arm`.
 3. Tạo tag **trùng đúng phiên bản trong changelog** và đẩy lên:
@@ -101,8 +103,9 @@ Phần đóng kèm giữ giấy phép riêng: `pymavlink` trong `vendor/` (LGPL-
 5. Thêm series mới: sửa `DEFAULT_SERIES` (ví dụ `noble plucky`). Mỗi series được upload riêng với phiên bản `0.2.0~noble1`,
    `0.2.0~plucky1`. Nếu phải upload lại (Launchpad từ chối cùng tên phiên bản với nội dung khác), tăng phiên bản trong changelog.
 
-Lần upload đầu tiên của `uavlink-router` luôn kèm file `.orig.tar.xz` (script dùng `-sa`, nên lần nào cũng kèm; Launchpad bỏ
-qua nếu file giống hệt đã có).
+Lần upload đầu tiên của `uavlink-router` luôn kèm file `.orig.tar.xz` (script dùng `-sa`, nên lần nào cũng kèm).
+Trước khi `dput`, script hỏi PPA (API công khai): gói nguồn nào đã có đúng phiên bản đó thì bỏ qua và in `skip: …`. Vì vậy
+phát hành `uavlink` mới mà không đổi `uavlink-router` thì chỉ `uavlink` được upload.
 
 ### Chạy tay trong WSL (không qua GitHub)
 

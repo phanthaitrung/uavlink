@@ -96,6 +96,17 @@ retarget() {  # <changelog> <package> <version> <series>
 
 is_signed() { grep -q '^-----BEGIN PGP SIGNATURE-----' "$1"; }
 
+# Was this source version ever uploaded to the PPA? Launchpad rejects a second upload of the same version
+# (uavlink-router keeps its version across uavlink releases). Anonymous API; unreachable counts as "no".
+in_ppa() {  # in_ppa <changes file>
+  local src ver owner="${ppa#ppa:}" name="${ppa##*/}"
+  owner="${owner%%/*}"
+  src="$(sed -n 's/^Source: //p' "$1")"; ver="$(sed -n 's/^Version: //p' "$1")"
+  ver="${ver//+/%2B}"   # 4+git16… : a bare + is a space in a query string
+  curl -fsS -m 30 "https://api.launchpad.net/devel/~$owner/+archive/ubuntu/$name?ws.op=getPublishedSources&source_name=$src&version=$ver&exact_match=true" 2>/dev/null \
+    | grep -q '"source_package_version"'
+}
+
 out="$here/out/ppa"
 rm -rf "$out"; mkdir -p "$out"
 
@@ -142,6 +153,10 @@ done
 
 echo "== dput"
 for c in "${changes_files[@]}"; do
+  if in_ppa "$c"; then
+    echo "skip: $(basename "$c" _source.changes) is already in $ppa"
+    continue
+  fi
   if [ "$mode" = upload ]; then
     is_signed "$c" || { echo "$c is not signed" >&2; exit 1; }
     dput "$ppa" "$c"
