@@ -5,8 +5,8 @@
   "star": true,
   "name": {"vi": "Cấu hình mặc định", "en": "Default configuration"},
   "desc": {
-    "vi": "Mạng LAN: X25 192.168.50.1 ↔ CM5 192.168.50.2 (thêm 192.168.144.2). MAVLink gửi tới VPS 209.97.167.92:14555 và máy văn phòng qua Tailscale, TCP 5760 cục bộ. Ký MAVLink2 bật, tường lửa bật, SSH chỉ dùng khóa.",
-    "en": "LAN network: X25 192.168.50.1 ↔ CM5 192.168.50.2 (plus 192.168.144.2). MAVLink to the VPS 209.97.167.92:14555 and to the office computer over Tailscale, local TCP 5760. MAVLink2 signing on, firewall on, SSH key-only."
+    "vi": "Mạng LAN: X25 192.168.50.1 ↔ CM5 192.168.50.2 (thêm 192.168.144.2). MAVLink gửi tới VPS 209.97.167.92:14555; GCS kết nối qua VPS. Không cần Tailscale. Ký MAVLink2 bật, tường lửa bật, SSH chỉ dùng khóa.",
+    "en": "LAN network: X25 192.168.50.1 ↔ CM5 192.168.50.2 (plus 192.168.144.2). MAVLink to the VPS 209.97.167.92:14555; ground stations connect through the VPS. No Tailscale needed. MAVLink2 signing on, firewall on, SSH key-only."
   },
   "values": {
     "CM5_LAN_IP": "192.168.50.2",
@@ -15,7 +15,8 @@
     "X25_NETMASK": "24",
     "VPS_PUBLIC_IP": "209.97.167.92",
     "VPS_UPLINK_PORT": "14555",
-    "CM5_EXTRA_UDP_TARGETS": "ground_station_office=100.70.184.3:14550",
+    "CM5_EXTRA_UDP_TARGETS": "",
+    "CM5_INSTALL_TAILSCALE": "0",
     "CM5_ROUTER_LOG_MODE": "while-armed",
     "MAVLINK_SIGNING": "1",
     "SSH_HARDEN": "1",

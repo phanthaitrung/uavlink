@@ -96,10 +96,19 @@ class SchemaTest(unittest.TestCase):
 
     def test_defaults_match_legacy_config(self):
         legacy = config.read_env(FIXTURE)
+        # Since 0.1.3 Tailscale is off by default (the VPS carries MAVLink), unlike the hand-built setup.
+        differ = ("X25_BACKUP_DIR", "CM5_USER", "MAVLINK_SIGNING_PASSPHRASE", "CM5_INSTALL_TAILSCALE", "CM5_EXTRA_UDP_TARGETS")
         for role in ("cm5", "vps"):
             for k, v in config.defaults(role).items():
-                if k in legacy and k not in ("X25_BACKUP_DIR", "CM5_USER", "MAVLINK_SIGNING_PASSPHRASE"):
+                if k in legacy and k not in differ:
                     self.assertEqual(v, legacy[k], k)
+
+    def test_vps_presets_leave_tailscale_off(self):
+        for p in presets.load_presets("cm5"):
+            values = presets.resolve("cm5", p["id"], {})
+            if p.get("values", {}).get("VPS_PUBLIC_IP") or "VPS_PUBLIC_IP" in p.get("ask", []):
+                self.assertEqual(values["CM5_INSTALL_TAILSCALE"], "0", p["id"])
+                self.assertEqual(values["CM5_EXTRA_UDP_TARGETS"], "", p["id"])
 
     def test_secret_keys(self):
         self.assertEqual(set(config.secret_keys()),

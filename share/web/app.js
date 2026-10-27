@@ -978,7 +978,9 @@ function buildField(k) {
     var present = S.srv.current && S.srv.current.secrets_present && S.srv.current.secrets_present[k];
     input = h("input", {
       id: id, type: "password", autocomplete: "new-password", spellcheck: "false",
-      placeholder: present ? t("field.secret_keep") : t("field.secret_generate"), value: S.secrets[k] || ""
+      // only the signing passphrase is generated when left empty (config.save)
+      placeholder: present ? t("field.secret_keep") : (def.type === "passphrase" ? t("field.secret_generate") : null),
+      value: S.secrets[k] || ""
     });
     input.addEventListener("input", function () { S.secrets[k] = input.value; afterChange(k); });
     setInput = function (v) { input.value = v; S.secrets[k] = v; };

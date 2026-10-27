@@ -16,6 +16,7 @@
     "VPS_PUBLIC_IP": "",
     "VPS_UPLINK_PORT": "14555",
     "CM5_EXTRA_UDP_TARGETS": "",
+    "CM5_INSTALL_TAILSCALE": "0",
     "MAVLINK_SIGNING": "1",
     "SSH_HARDEN": "1",
     "CM5_ENABLE_UFW": "1",

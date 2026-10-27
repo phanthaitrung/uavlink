@@ -353,14 +353,14 @@
       ],
       "tab": "links",
       "type": "udp_targets",
-      "default": "ground_station_office=100.70.184.3:14550",
+      "default": "",
       "label": {
         "vi": "Đích UDP bổ sung",
         "en": "Additional UDP targets"
       },
       "help": {
-        "vi": "Các đích nhận MAVLink từ CM5, dạng ten=ip:cong, cách nhau bằng dấu cách. Giá trị mặc định là máy văn phòng qua Tailscale. Để trống nếu không dùng.",
-        "en": "Targets that receive MAVLink from the CM5, as name=ip:port separated by spaces. The default is the office computer over Tailscale. Leave empty if not used."
+        "vi": "Các đích nhận MAVLink từ CM5 ngoài VPS, dạng ten=ip:cong, cách nhau bằng dấu cách, ví dụ máy trong Tailscale. Để trống nếu không dùng.",
+        "en": "Targets other than the VPS that receive MAVLink from the CM5, as name=ip:port separated by spaces, e.g. computers in Tailscale. Leave empty if not used."
       },
       "advanced": false,
       "secret": false,
@@ -737,14 +737,14 @@
       ],
       "tab": "wifi",
       "type": "bool",
-      "default": "1",
+      "default": "0",
       "label": {
         "vi": "Cài đặt Tailscale",
         "en": "Install Tailscale"
       },
       "help": {
-        "vi": "Cài đặt Tailscale để truy cập CM5 và gửi MAVLink qua mạng riêng.",
-        "en": "Installs Tailscale to reach the CM5 and send MAVLink over the private network."
+        "vi": "Cài đặt Tailscale để truy cập CM5 và gửi MAVLink qua mạng riêng. Không cần khi CM5 gửi MAVLink qua VPS.",
+        "en": "Installs Tailscale to reach the CM5 and send MAVLink over the private network. Not needed when the CM5 sends MAVLink through the VPS."
       },
       "advanced": false,
       "secret": false,

@@ -27,6 +27,8 @@ from urllib.parse import urlsplit
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SHARE = os.path.join(ROOT, "share")
 WEB = os.path.join(SHARE, "web")
+with open(os.path.join(ROOT, "py", "uavlink", "__init__.py"), encoding="utf-8") as _f:
+    VERSION = re.search(r'VERSION = "([^"]+)"', _f.read()).group(1) + "-mock"
 
 
 def bi(vi, en):
@@ -301,7 +303,7 @@ class Mock:
     def state(self):
         o = self.opts
         return {
-            "version": "0.1.0-mock", "is_wsl": o.preview_only, "preview_only": o.preview_only,
+            "version": VERSION, "is_wsl": o.preview_only, "preview_only": o.preview_only,
             "role_guess": "vps" if o.vps else "cm5",
             "host": {"hostname": "cm5-mock", "ips": ["192.168.1.57", "100.101.20.3"]},
             "detect": {
@@ -666,7 +668,7 @@ class Handler(BaseHTTPRequestHandler):
                 if job:
                     m.last_values = dict(values)
                     m.passphrase = "".join(random.choice(string.ascii_letters + string.digits) for _ in range(32))
-                    m.applied = {"preset": body.get("preset"), "role": role, "time": time.strftime("%Y-%m-%dT%H:%M:%S"), "version": "0.1.0-mock"}
+                    m.applied = {"preset": body.get("preset"), "role": role, "time": time.strftime("%Y-%m-%dT%H:%M:%S"), "version": VERSION}
             else:
                 job = m.start_job("precheck", m.scripts("precheck", values))
             if not job:
